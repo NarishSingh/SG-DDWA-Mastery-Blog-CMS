@@ -49,3 +49,5 @@ UPDATE user SET
 UPDATE user SET 
     password = '$2a$10$2rFvUu2vo50WTZnRWhMHw.kqn0Du7GLBw3ghOPMDZ9qWvfDWZkyn.' 
     WHERE id = 2;
+
+SELECT * FROM securitywithdb.user;
