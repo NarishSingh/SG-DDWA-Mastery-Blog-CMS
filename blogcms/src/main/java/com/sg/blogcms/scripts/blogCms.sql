@@ -1,0 +1,60 @@
+DROP DATABASE IF EXISTS blogCms;
+CREATE DATABASE blogCms;
+
+USE blogCms;
+
+CREATE TABLE `role` (
+    roleId INT PRIMARY KEY AUTO_INCREMENT,
+    `role` VARCHAR(30) NOT NULL
+);
+
+CREATE TABLE `user` (
+    userId INT PRIMARY KEY AUTO_INCREMENT,
+    username VARCHAR(30) NOT NULL,
+    password VARCHAR(50) NOT NULL,
+    firstName VARCHAR(50),
+    lastName VARCHAR(50),
+    enabled BIT NOT NULL,
+    email VARCHAR(50)
+);
+
+-- bridge table
+CREATE TABLE userRole (
+    roleId INT NOT NULL,
+    userId INT NOT NULL,
+    PRIMARY KEY (roleId, userId),
+    CONSTRAINT `fk_role_userRole` FOREIGN KEY (roleId)
+        REFERENCES `role`(roleId),
+    CONSTRAINT `fk_user_userRole` FOREIGN KEY (userId)
+        REFERENCES `user`(userId)
+);
+
+CREATE TABLE post (
+    postId INT PRIMARY KEY AUTO_INCREMENT,
+    title VARCHAR(50) NOT NULL,
+    body TEXT NOT NULL,
+    approved BIT NOT NULL,
+    createdOn DATETIME NOT NULL,
+    postOn DATETIME NOT NULL,
+    lastEdited DATETIME NOT NULL,
+    expireOn DATETIME,
+    userId INT NOT NULL,
+    CONSTRAINT `fk_user_post` FOREIGN KEY (userId)
+        REFERENCES `user` (userId)
+);
+
+CREATE TABLE category (
+    categoryId INT PRIMARY KEY AUTO_INCREMENT,
+    category VARCHAR(30) NOT NULL
+);
+
+-- bridge table
+CREATE TABLE postCategory (
+    postId INT NOT NULL,
+    categoryId INT NOT NULL,
+    PRIMARY KEY (postId, categoryId),
+    CONSTRAINT `fk_post_postCategory` FOREIGN KEY (postId)
+        REFERENCES post (postId),
+    CONSTRAINT `fk_category_postCategory` FOREIGN KEY (categoryId)
+        REFERENCES category (categoryId)
+);

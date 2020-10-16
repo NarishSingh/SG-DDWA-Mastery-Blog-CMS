@@ -1,0 +1,4 @@
+DROP DATABASE IF EXISTS blogCmsTest;
+CREATE DATABASE blogCmsTest;
+
+USE blogCmsTest;
