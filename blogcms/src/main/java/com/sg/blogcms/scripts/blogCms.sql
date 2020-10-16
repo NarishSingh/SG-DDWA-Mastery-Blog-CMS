@@ -12,9 +12,9 @@ CREATE TABLE `user` (
     userId INT PRIMARY KEY AUTO_INCREMENT,
     username VARCHAR(30) NOT NULL,
     password VARCHAR(50) NOT NULL,
+    isEnabled BIT NOT NULL,
     firstName VARCHAR(50),
     lastName VARCHAR(50),
-    enabled BIT NOT NULL,
     email VARCHAR(50)
 );
 
@@ -33,7 +33,8 @@ CREATE TABLE post (
     postId INT PRIMARY KEY AUTO_INCREMENT,
     title VARCHAR(50) NOT NULL,
     body TEXT NOT NULL,
-    approved BIT NOT NULL,
+    isApproved BIT NOT NULL,
+    isStaticPage BIT NOT NULL,
     createdOn DATETIME NOT NULL,
     postOn DATETIME NOT NULL,
     lastEdited DATETIME NOT NULL,
