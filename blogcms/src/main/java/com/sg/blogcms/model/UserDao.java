@@ -37,6 +37,13 @@ public interface UserDao {
     List<User> getAllUsers();
 
     /**
+     * Retrieve all users with enabled accounts
+     *
+     * @return {List} all active users
+     */
+    List<User> getAllEnabledUsers();
+
+    /**
      * Update a User account
      *
      * @param userEdit {User} a well formed obj with matching id for edit

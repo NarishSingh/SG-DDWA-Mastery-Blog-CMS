@@ -86,6 +86,18 @@ public class UserDaoDb implements UserDao {
     }
 
     @Override
+    public List<User> getAllEnabledUsers() {
+        String readAllQuery = "SELECT * FROM user "
+                + "WHERE isEnabled != 0;";
+        List<User> activeUsers = jdbc.query(readAllQuery, new UserMapper());
+        for (User user : activeUsers) {
+            user.setRoles(readRolesForUser(user.getId()));
+        }
+
+        return activeUsers;
+    }
+
+    @Override
     public User updateUser(User userEdit) {
         String updateQuery = "UPDATE user "
                 + "SET "
@@ -155,7 +167,7 @@ public class UserDaoDb implements UserDao {
     /**
      * RowMapper impl
      */
-    private static final class UserMapper implements RowMapper<User> {
+    public static final class UserMapper implements RowMapper<User> {
 
         @Override
         public User mapRow(ResultSet rs, int i) throws SQLException {
