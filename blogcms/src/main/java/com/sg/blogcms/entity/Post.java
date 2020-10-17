@@ -12,7 +12,6 @@ public class Post {
     private boolean staticPage;
     private LocalDateTime createdOn;
     private LocalDateTime postOn;
-    private LocalDateTime lastEdited;
     private LocalDateTime expireOn; //nullable
     private User user;
 
@@ -73,14 +72,6 @@ public class Post {
         this.postOn = postOn;
     }
 
-    public LocalDateTime getLastEdited() {
-        return lastEdited;
-    }
-
-    public void setLastEdited(LocalDateTime lastEdited) {
-        this.lastEdited = lastEdited;
-    }
-
     public LocalDateTime getExpireOn() {
         return expireOn;
     }
@@ -108,7 +99,6 @@ public class Post {
         hash = 97 * hash + (this.staticPage ? 1 : 0);
         hash = 97 * hash + Objects.hashCode(this.createdOn);
         hash = 97 * hash + Objects.hashCode(this.postOn);
-        hash = 97 * hash + Objects.hashCode(this.lastEdited);
         hash = 97 * hash + Objects.hashCode(this.expireOn);
         hash = 97 * hash + Objects.hashCode(this.user);
         return hash;
@@ -147,9 +137,6 @@ public class Post {
         if (!Objects.equals(this.postOn, other.postOn)) {
             return false;
         }
-        if (!Objects.equals(this.lastEdited, other.lastEdited)) {
-            return false;
-        }
         if (!Objects.equals(this.expireOn, other.expireOn)) {
             return false;
         }
@@ -161,11 +148,9 @@ public class Post {
 
     @Override
     public String toString() {
-        return "Post{" + "id=" + id + ", title=" + title + ", body=" + body
-                + ", approved=" + approved + ", staticPage=" + staticPage
-                + ", createdOn=" + createdOn + ", postOn=" + postOn
-                + ", lastEdited=" + lastEdited + ", expireOn=" + expireOn
-                + ", user=" + user + '}';
+        return "Post{" + "id=" + id + ", title=" + title + ", body=" + body + ", approved=" 
+                + approved + ", staticPage=" + staticPage + ", createdOn=" + createdOn 
+                + ", postOn=" + postOn + ", expireOn=" + expireOn + ", user=" + user + '}';
     }
-
+    
 }

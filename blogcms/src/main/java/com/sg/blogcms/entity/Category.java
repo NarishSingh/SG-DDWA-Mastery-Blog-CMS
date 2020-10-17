@@ -1,11 +1,13 @@
 package com.sg.blogcms.entity;
 
+import java.util.List;
 import java.util.Objects;
 
 public class Category {
-    
+
     private int id;
     private String category;
+    private List<Post> posts;
 
     /*gs*/
     public int getId() {
@@ -23,13 +25,22 @@ public class Category {
     public void setCategory(String category) {
         this.category = category;
     }
-    
+
+    public List<Post> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(List<Post> posts) {
+        this.posts = posts;
+    }
+
     /*testing*/
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 79 * hash + this.id;
-        hash = 79 * hash + Objects.hashCode(this.category);
+        hash = 29 * hash + this.id;
+        hash = 29 * hash + Objects.hashCode(this.category);
+        hash = 29 * hash + Objects.hashCode(this.posts);
         return hash;
     }
 
@@ -51,12 +62,16 @@ public class Category {
         if (!Objects.equals(this.category, other.category)) {
             return false;
         }
+        if (!Objects.equals(this.posts, other.posts)) {
+            return false;
+        }
         return true;
     }
 
     @Override
     public String toString() {
-        return "Category{" + "id=" + id + ", category=" + category + '}';
+        return "Category{" + "id=" + id + ", category=" + category + ", posts="
+                + posts + '}';
     }
-    
+
 }

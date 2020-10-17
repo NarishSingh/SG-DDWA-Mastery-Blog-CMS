@@ -52,7 +52,7 @@ public class UserDaoDb implements UserDao {
             String readQuery = "SELECT * FROM user "
                     + "WHERE userId = ?;";
             User user = jdbc.queryForObject(readQuery, new UserMapper(), id);
-            user.setRoles(associateRolesForUser(user.getId()));
+            user.setRoles(readRolesForUser(user.getId()));
 
             return user;
         } catch (DataAccessException e) {
@@ -66,7 +66,7 @@ public class UserDaoDb implements UserDao {
             String readQuery = "SELECT * FROM user "
                     + "WHERE username = ?;";
             User user = jdbc.queryForObject(readQuery, new UserMapper(), username);
-            user.setRoles(associateRolesForUser(user.getId()));
+            user.setRoles(readRolesForUser(user.getId()));
 
             return user;
         } catch (DataAccessException e) {
@@ -79,7 +79,7 @@ public class UserDaoDb implements UserDao {
         String readAllQuery = "SELECT * FROM user;";
         List<User> users = jdbc.query(readAllQuery, new UserMapper());
         for (User user : users) {
-            user.setRoles(associateRolesForUser(user.getId()));
+            user.setRoles(readRolesForUser(user.getId()));
         }
 
         return users;
@@ -139,13 +139,13 @@ public class UserDaoDb implements UserDao {
 
     /*helper*/
     /**
-     * Retrieve Roles a User
+     * Retrieve Roles for a User
      *
      * @param id {int} an existing User obj's id
      * @return {Set} Role obj's for a user
      * @throws DataAccessException if cannot read roles
      */
-    private Set<Role> associateRolesForUser(int id) throws DataAccessException {
+    private Set<Role> readRolesForUser(int id) throws DataAccessException {
         String selectRolesQuery = "SELECT r.* FROM userRole ur "
                 + "JOIN role r ON r.roleId = ur.roleId "
                 + "WHERE ur.userId = ?;";
