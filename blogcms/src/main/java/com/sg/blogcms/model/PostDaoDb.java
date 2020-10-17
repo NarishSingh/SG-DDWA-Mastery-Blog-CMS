@@ -2,10 +2,12 @@ package com.sg.blogcms.model;
 
 import com.sg.blogcms.entity.Post;
 import com.sg.blogcms.entity.User;
+import com.sg.blogcms.model.UserDaoDb.UserMapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -58,12 +60,20 @@ public class PostDaoDb implements PostDao {
 
     @Override
     public List<Post> readAllPosts() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        String readAllQuery = "SELECT * FROM post;";
+        List<Post> posts = jdbc.query(readAllQuery, new PostMapper());
+        
+        for (Post p : posts) {
+            p.setUser(readUserForPost(p.getId()));
+        }
+        
+        return posts;
     }
 
     @Override
     public List<Post> readPostsByDate() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        String readActivePosts = "SELECT * FROM post "
+                + "WHERE postOn"
     }
 
     @Override
@@ -92,8 +102,11 @@ public class PostDaoDb implements PostDao {
      * @param id {int} a valid id
      * @return {User} obj for a Post from db
      */
-    private User readUserForPost(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    private User readUserForPost(int id) throws DataAccessException {
+        String readQuery = "SELECT u.* FROM user u "
+                + "JOIN post p ON p.userId = u.userId "
+                + "WHERE p.postId = ?;";
+        return jdbc.queryForObject(readQuery, new UserMapper(), id);
     }
     
     /**
