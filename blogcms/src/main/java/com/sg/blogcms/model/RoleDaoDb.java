@@ -72,6 +72,7 @@ public class RoleDaoDb implements RoleDao {
     }
 
     @Override
+    @Transactional
     public boolean deleteRoleById(int id) {
         //delete from post category bridge
         String delPC = "DELETE FROM postCategory pc "

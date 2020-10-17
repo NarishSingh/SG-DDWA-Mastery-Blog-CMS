@@ -13,6 +13,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 public class UserDaoDb implements UserDao {
@@ -21,6 +22,7 @@ public class UserDaoDb implements UserDao {
     JdbcTemplate jdbc;
 
     @Override
+    @Transactional
     public User createUser(User user) {
         //insert to user
         String insertUserQuery = "INSERT INTO user(username, password, isEnabled, firstName, lastName, email) "
@@ -98,7 +100,8 @@ public class UserDaoDb implements UserDao {
     }
 
     @Override
-    public User updateUser(User userEdit) {
+    @Transactional
+    public User updateUser(User user) {
         String updateQuery = "UPDATE user "
                 + "SET "
                 + "username = ?, "
@@ -109,34 +112,35 @@ public class UserDaoDb implements UserDao {
                 + "email = ? "
                 + "WHERE userId = ?;";
         int updated = jdbc.update(updateQuery,
-                userEdit.getUsername(),
-                userEdit.getPassword(),
-                userEdit.isEnabled(),
-                userEdit.getFirstName(),
-                userEdit.getLastName(),
-                userEdit.getEmail(),
-                userEdit.getId());
+                user.getUsername(),
+                user.getPassword(),
+                user.isEnabled(),
+                user.getFirstName(),
+                user.getLastName(),
+                user.getEmail(),
+                user.getId());
 
         if (updated == 1) {
             //delete from bridge
             String delUR = "DELETE FROM userRole "
                     + "WHERE userId = ?;";
-            jdbc.update(delUR, userEdit.getId());
+            jdbc.update(delUR, user.getId());
 
             //reinsert to bridge
-            for (Role role : userEdit.getRoles()) {
+            for (Role role : user.getRoles()) {
                 String insertURQuery = "INSERT INTO userRole (userId, roleId) "
                         + "VALUES(?,?);";
-                jdbc.update(insertURQuery, userEdit.getId(), role.getId());
+                jdbc.update(insertURQuery, user.getId(), role.getId());
             }
 
-            return userEdit;
+            return user;
         } else {
             return null;
         }
     }
 
     @Override
+    @Transactional
     public boolean deleteUserById(int id) {
         //delete from bridge
         String delUR = "DELETE FROM userRole "
