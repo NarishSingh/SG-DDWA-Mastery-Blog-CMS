@@ -62,25 +62,82 @@ public class UserDaoDb implements UserDao {
 
     @Override
     public User readUserByUsername(String username) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            String readQuery = "SELECT * FROM user "
+                    + "WHERE username = ?;";
+            User user = jdbc.queryForObject(readQuery, new UserMapper(), username);
+            user.setRoles(associateRolesForUser(user.getId()));
+
+            return user;
+        } catch (DataAccessException e) {
+            return null;
+        }
     }
 
     @Override
     public List<User> getAllUsers() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        String readAllQuery = "SELECT * FROM user;";
+        List<User> users = jdbc.query(readAllQuery, new UserMapper());
+        for (User user : users) {
+            user.setRoles(associateRolesForUser(user.getId()));
+        }
+
+        return users;
     }
 
     @Override
     public User updateUser(User userEdit) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        String updateQuery = "UPDATE user "
+                + "SET "
+                + "username = ?, "
+                + "password = ?, "
+                + "isEnabled = ?, "
+                + "firstName = ?, "
+                + "lastName = ?, "
+                + "email = ? "
+                + "WHERE userId = ?;";
+        int updated = jdbc.update(updateQuery,
+                userEdit.getUsername(),
+                userEdit.getPassword(),
+                userEdit.isEnabled(),
+                userEdit.getFirstName(),
+                userEdit.getLastName(),
+                userEdit.getEmail(),
+                userEdit.getId());
+
+        if (updated == 1) {
+            //delete from bridge
+            String delUR = "DELETE FROM userRole "
+                    + "WHERE userId = ?;";
+            jdbc.update(delUR, userEdit.getId());
+
+            //reinsert to bridge
+            for (Role role : userEdit.getRoles()) {
+                String insertURQuery = "INSERT INTO userRole (userId, roleId) "
+                        + "VALUES(?,?);";
+                jdbc.update(insertURQuery, userEdit.getId(), role.getId());
+            }
+
+            return userEdit;
+        } else {
+            return null;
+        }
     }
 
     @Override
     public boolean deleteUserById(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //delete from bridge
+        String delUR = "DELETE FROM userRole "
+                + "WHERE userId = ?;";
+        jdbc.update(delUR, id);
+
+        //delete user
+        String deleteQuery = "DELETE FROM user "
+                + "WHERE userId = ?;";
+        return jdbc.update(deleteQuery, id) == 1;
     }
 
-    /*helpers*/
+    /*helper*/
     /**
      * Retrieve Roles a User
      *
@@ -92,7 +149,6 @@ public class UserDaoDb implements UserDao {
         String selectRolesQuery = "SELECT r.* FROM userRole ur "
                 + "JOIN role r ON r.roleId = ur.roleId "
                 + "WHERE ur.userId = ?;";
-
         return new HashSet<>(jdbc.query(selectRolesQuery, new RoleMapper(), id));
     }
 

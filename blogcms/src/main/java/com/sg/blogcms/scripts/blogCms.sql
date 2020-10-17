@@ -37,7 +37,6 @@ CREATE TABLE post (
     isStaticPage BIT NOT NULL,
     createdOn DATETIME NOT NULL,
     postOn DATETIME NOT NULL,
-    lastEdited DATETIME NOT NULL,
     expireOn DATETIME,
     userId INT NOT NULL,
     CONSTRAINT `fk_user_post` FOREIGN KEY (userId)
