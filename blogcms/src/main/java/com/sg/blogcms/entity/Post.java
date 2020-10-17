@@ -1,6 +1,7 @@
 package com.sg.blogcms.entity;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 
 public class Post {
@@ -14,6 +15,7 @@ public class Post {
     private LocalDateTime postOn;
     private LocalDateTime expireOn; //nullable
     private User user;
+    private List<Category> categories;
 
     /*gs*/
     public int getId() {
@@ -88,19 +90,28 @@ public class Post {
         this.user = user;
     }
 
+    public List<Category> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(List<Category> categories) {
+        this.categories = categories;
+    }
+
     /*testing*/
     @Override
     public int hashCode() {
-        int hash = 5;
-        hash = 97 * hash + this.id;
-        hash = 97 * hash + Objects.hashCode(this.title);
-        hash = 97 * hash + Objects.hashCode(this.body);
-        hash = 97 * hash + (this.approved ? 1 : 0);
-        hash = 97 * hash + (this.staticPage ? 1 : 0);
-        hash = 97 * hash + Objects.hashCode(this.createdOn);
-        hash = 97 * hash + Objects.hashCode(this.postOn);
-        hash = 97 * hash + Objects.hashCode(this.expireOn);
-        hash = 97 * hash + Objects.hashCode(this.user);
+        int hash = 7;
+        hash = 67 * hash + this.id;
+        hash = 67 * hash + Objects.hashCode(this.title);
+        hash = 67 * hash + Objects.hashCode(this.body);
+        hash = 67 * hash + (this.approved ? 1 : 0);
+        hash = 67 * hash + (this.staticPage ? 1 : 0);
+        hash = 67 * hash + Objects.hashCode(this.createdOn);
+        hash = 67 * hash + Objects.hashCode(this.postOn);
+        hash = 67 * hash + Objects.hashCode(this.expireOn);
+        hash = 67 * hash + Objects.hashCode(this.user);
+        hash = 67 * hash + Objects.hashCode(this.categories);
         return hash;
     }
 
@@ -143,14 +154,18 @@ public class Post {
         if (!Objects.equals(this.user, other.user)) {
             return false;
         }
+        if (!Objects.equals(this.categories, other.categories)) {
+            return false;
+        }
         return true;
     }
 
     @Override
     public String toString() {
-        return "Post{" + "id=" + id + ", title=" + title + ", body=" + body + ", approved=" 
-                + approved + ", staticPage=" + staticPage + ", createdOn=" + createdOn 
-                + ", postOn=" + postOn + ", expireOn=" + expireOn + ", user=" + user + '}';
+        return "Post{" + "id=" + id + ", title=" + title + ", body=" + body
+                + ", approved=" + approved + ", staticPage=" + staticPage
+                + ", createdOn=" + createdOn + ", postOn=" + postOn + ", expireOn="
+                + expireOn + ", user=" + user + ", categories=" + categories + '}';
     }
-    
+
 }
