@@ -88,14 +88,6 @@ public class CategoryDaoDb implements CategoryDao {
         return jdbc.update(delCategoryQuery, id) == 1;
     }
 
-    @Override
-    public List<Post> readPostsByCategory(int id) {
-        String readPCQuery = "SELECT p.* FROM post "
-                + "JOIN postCategory pc ON pc.postId = p.postId "
-                + "WHERE pc.categoryId = ?;";
-        return jdbc.query(readPCQuery, new PostMapper(), id);
-    }
-
     /**
      * RowMapper impl
      */

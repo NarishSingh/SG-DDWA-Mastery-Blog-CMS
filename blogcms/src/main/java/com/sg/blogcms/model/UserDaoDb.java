@@ -42,7 +42,7 @@ public class UserDaoDb implements UserDao {
         for (Role role : user.getRoles()) {
             String insertURQuery = "INSERT INTO userRole(userId, roleId) "
                     + "VALUES(?,?);";
-            jdbc.update(insertURQuery, user.getId(), role.getRole());
+            jdbc.update(insertURQuery, user.getId(), role.getId());
         }
 
         return user;
@@ -142,12 +142,31 @@ public class UserDaoDb implements UserDao {
     @Override
     @Transactional
     public boolean deleteUserById(int id) {
-        //delete from bridge
+        /*delete from bridge*/
         String delUR = "DELETE FROM userRole "
                 + "WHERE userId = ?;";
         jdbc.update(delUR, id);
+        
+        /*delete post*/
+        //bridge
+        /*
+        String delPC = "DELETE FROM postCategory pc "
+                + "JOIN post p ON p.postId = pc.postId "
+                + "JOIN user u ON u.userId = p.userId "
+                + "WHERE u.userId = ?;";
+        */
+        String delPC = "DELETE FROM postCategory "
+                + "WHERE postId IN "
+                + "(SELECT postId FROM post "
+                + "WHERE userId = ?);";
+        jdbc.update(delPC, id);
+        
+        //actual posts
+        String delP = "DELETE FROM post "
+                + "WHERE userId = ?;";
+        jdbc.update(delP, id);
 
-        //delete user
+        /*delete user*/
         String deleteQuery = "DELETE FROM user "
                 + "WHERE userId = ?;";
         return jdbc.update(deleteQuery, id) == 1;

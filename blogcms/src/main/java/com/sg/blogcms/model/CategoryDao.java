@@ -52,12 +52,4 @@ public interface CategoryDao {
      * @return {boolean} true if deleted, false otherwise
      */
     boolean deleteCategoryById(int id);
-
-    /**
-     * Retrieve posts by Category
-     *
-     * @param id {int} a valid id
-     * @return {List} all posts with tagged with that category
-     */
-    List<Post> readPostsByCategory(int id);
 }

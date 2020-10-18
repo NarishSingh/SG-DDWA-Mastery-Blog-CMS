@@ -121,6 +121,39 @@ public class PostDaoDb implements PostDao {
     }
 
     @Override
+    public List<Post> readPostsByCategory(int categoryId) {
+        String readPCQuery = "SELECT p.* FROM post p "
+                + "JOIN postCategory pc ON pc.postId = p.postId "
+                + "WHERE pc.categoryId = ?;";
+        List<Post> posts = jdbc.query(readPCQuery, new PostMapper(), categoryId);
+
+        //associate users
+        for (Post p : posts) {
+            p.setUser(readUserForPost(p.getId()));
+        }
+
+        return posts;
+    }
+
+    @Override
+    public List<Post> readPublishedPostsByCategory(int categoryId) {
+        String readPCQuery = "SELECT p.* FROM post p "
+                + "JOIN postCategory pc ON pc.postId = p.postId "
+                + "WHERE pc.categoryId = ? "
+                + "AND p.postOn <= NOW() "
+                + "AND p.expireOn >= NOW() "
+                + "AND p.isApproved != 0;";
+        List<Post> posts = jdbc.query(readPCQuery, new PostMapper(), categoryId);
+
+        //associate users
+        for (Post p : posts) {
+            p.setUser(readUserForPost(p.getId()));
+        }
+
+        return posts;
+    }
+
+    @Override
     @Transactional
     public Post updatePost(Post post) {
         String updateQuery = "UPDATE post "
