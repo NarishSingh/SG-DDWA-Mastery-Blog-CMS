@@ -4,11 +4,7 @@ import com.sg.blogcms.entity.Category;
 import com.sg.blogcms.entity.Post;
 import com.sg.blogcms.entity.Role;
 import com.sg.blogcms.entity.User;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import static org.junit.jupiter.api.Assertions.*;
@@ -19,7 +15,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -172,7 +167,6 @@ public class CategoryDaoTest {
     }
 
     //FIXME move to post dao testing
-    
     /**
      * Test of readPostsByCategory method, of class CategoryDao.
      */
@@ -250,6 +244,5 @@ public class CategoryDaoTest {
         assertNotNull(cat3posts);
         assertEquals(0, cat3posts.size());
     }
-*/
-
+     */
 }
