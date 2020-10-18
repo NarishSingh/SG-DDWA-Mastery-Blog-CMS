@@ -202,6 +202,7 @@ public class UserDaoDb implements UserDao {
             u.setFirstName(rs.getString("firstName"));
             u.setLastName(rs.getString("lastName"));
             u.setEmail(rs.getString("email"));
+            //roles will be associated in implentations
 
             return u;
         }

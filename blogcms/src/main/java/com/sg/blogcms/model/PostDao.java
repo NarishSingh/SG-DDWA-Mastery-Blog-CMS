@@ -1,6 +1,5 @@
 package com.sg.blogcms.model;
 
-import com.sg.blogcms.entity.Category;
 import com.sg.blogcms.entity.Post;
 import java.util.List;
 
@@ -53,7 +52,7 @@ public interface PostDao {
      * @return {List} all posts that can be published/rendered on load
      */
     List<Post> readAllForPublication();
-    
+
     /**
      * Retrieve posts by Category
      *
