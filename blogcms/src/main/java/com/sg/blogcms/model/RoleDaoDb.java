@@ -62,7 +62,7 @@ public class RoleDaoDb implements RoleDao {
     public Role updateRole(Role roleEdit) {
         String updateQuery = "UPDATE role "
                 + "SET role = ? "
-                + "WHERE id = ?;";
+                + "WHERE roleId = ?;";
 
         if (jdbc.update(updateQuery, roleEdit.getRole(), roleEdit.getId()) == 1) {
             return roleEdit;
@@ -74,6 +74,8 @@ public class RoleDaoDb implements RoleDao {
     @Override
     @Transactional
     public boolean deleteRoleById(int id) {
+        //FIXME ask Randy if a role deletion also means all users are deleted
+        /*
         //delete from post category bridge
         String delPC = "DELETE FROM postCategory pc "
                 + "JOIN post p ON p.postId = pc.postId "
@@ -94,6 +96,7 @@ public class RoleDaoDb implements RoleDao {
                 + "JOIN userRole ur ON ur.userId = u.userId "
                 + "WHERE ur.roleId = ?;";
         jdbc.update(delU, id);
+        */
 
         //delete from user role
         String delUR = "DELETE FROM userRole "
@@ -103,7 +106,7 @@ public class RoleDaoDb implements RoleDao {
         //delete role
         String delRQuery = "DELETE FROM role "
                 + "WHERE roleId = ?;";
-        return jdbc.update(delU, id) == 1;
+        return jdbc.update(delRQuery, id) == 1;
     }
 
     /**

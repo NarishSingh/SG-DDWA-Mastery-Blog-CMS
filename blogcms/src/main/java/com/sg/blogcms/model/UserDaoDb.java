@@ -77,7 +77,7 @@ public class UserDaoDb implements UserDao {
     }
 
     @Override
-    public List<User> getAllUsers() {
+    public List<User> readAllUsers() {
         String readAllQuery = "SELECT * FROM user;";
         List<User> users = jdbc.query(readAllQuery, new UserMapper());
         for (User user : users) {
@@ -88,7 +88,7 @@ public class UserDaoDb implements UserDao {
     }
 
     @Override
-    public List<User> getAllEnabledUsers() {
+    public List<User> readAllEnabledUsers() {
         String readAllQuery = "SELECT * FROM user "
                 + "WHERE isEnabled != 0;";
         List<User> activeUsers = jdbc.query(readAllQuery, new UserMapper());

@@ -34,14 +34,14 @@ public interface UserDao {
      *
      * @return {List} all user obj's from db
      */
-    List<User> getAllUsers();
+    List<User> readAllUsers();
 
     /**
      * Retrieve all users with enabled accounts
      *
      * @return {List} all active users
      */
-    List<User> getAllEnabledUsers();
+    List<User> readAllEnabledUsers();
 
     /**
      * Update a User account
