@@ -1,7 +1,9 @@
 package com.sg.blogcms.model;
 
+import com.sg.blogcms.entity.Category;
 import com.sg.blogcms.entity.Post;
 import com.sg.blogcms.entity.User;
+import com.sg.blogcms.model.CategoryDaoDb.CategoryMapper;
 import com.sg.blogcms.model.UserDaoDb.UserMapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -18,15 +20,14 @@ public class PostDaoDb implements PostDao {
 
     @Autowired
     JdbcTemplate jdbc;
-    
+
     @Override
     @Transactional
     public Post createPost(Post post) {
         //insert
-        String insertQuery = "INSERT INTO post(title, body, isApproved, isStaticPage, "
-                + "createdOn, postOn, expireOn, userId) "
+        String insertQuery = "INSERT INTO post(title, body, isApproved, isStaticPage, createdOn, postOn, expireOn, userId) "
                 + "VALUES(?,?,?,?,?,?,?,?);";
-        jdbc.update(insertQuery, 
+        jdbc.update(insertQuery,
                 post.getTitle(),
                 post.getBody(),
                 post.isApproved(),
@@ -35,13 +36,14 @@ public class PostDaoDb implements PostDao {
                 post.getPostOn(),
                 post.getExpireOn(),
                 post.getUser().getId());
-        
+
         //set id from db
         int newId = jdbc.queryForObject("SELECT LAST_INSERT_ID();", Integer.class);
         post.setId(newId);
-        
-        //FIXME category stuff
-        
+
+        //insert to bridge
+        insertPostCategory(post);
+
         return post;
     }
 
@@ -51,10 +53,9 @@ public class PostDaoDb implements PostDao {
             String readQuery = "SELECT * FROM post "
                     + "WHERE postId = ?;";
             Post post = jdbc.queryForObject(readQuery, new PostMapper(), id);
-            
             post.setUser(readUserForPost(post.getId()));
-            //FIXME CATEGORY
-            
+            post.setCategories(readCategoriesForPost(id));
+
             return post;
         } catch (DataAccessException e) {
             return null;
@@ -65,12 +66,12 @@ public class PostDaoDb implements PostDao {
     public List<Post> readAllPosts() {
         String readAllQuery = "SELECT * FROM post;";
         List<Post> posts = jdbc.query(readAllQuery, new PostMapper());
-        
+
         for (Post p : posts) {
             p.setUser(readUserForPost(p.getId()));
-            //FIXME CATEGORY
+            p.setCategories(readCategoriesForPost(p.getId()));
         }
-        
+
         return posts;
     }
 
@@ -80,12 +81,12 @@ public class PostDaoDb implements PostDao {
                 + "WHERE postOn <= NOW() "
                 + "AND expireOn >= NOW();";
         List<Post> activePosts = jdbc.query(readActivePosts, new PostMapper());
-        
+
         for (Post p : activePosts) {
             p.setUser(readUserForPost(p.getId()));
-            //FIXME CATEGORY
+            p.setCategories(readCategoriesForPost(p.getId()));
         }
-        
+
         return activePosts;
     }
 
@@ -94,12 +95,12 @@ public class PostDaoDb implements PostDao {
         String readApprovedPosts = "SELECT * FROM post "
                 + "WHERE isApproved != 0;";
         List<Post> approvedPosts = jdbc.query(readApprovedPosts, new PostMapper());
-        
+
         for (Post p : approvedPosts) {
             p.setUser(readUserForPost(p.getId()));
-            //FIXME CATEGORY
+            p.setCategories(readCategoriesForPost(p.getId()));
         }
-        
+
         return approvedPosts;
     }
 
@@ -108,21 +109,20 @@ public class PostDaoDb implements PostDao {
         String readPublish = "SELECT * FROM post "
                 + "WHERE postOn <= NOW() "
                 + "AND expireOn >= NOW() "
-                + "AND isApproved != 0";
+                + "AND isApproved != 0;";
         List<Post> publishPosts = jdbc.query(readPublish, new PostMapper());
-        
+
         for (Post p : publishPosts) {
             p.setUser(readUserForPost(p.getId()));
-            //FIXME CATEGORY
+            p.setCategories(readCategoriesForPost(p.getId()));
         }
-        
+
         return publishPosts;
     }
 
     @Override
     @Transactional
     public Post updatePost(Post post) {
-        //FIXME CATEGORY
         String updateQuery = "UPDATE post "
                 + "SET "
                 + "title = ?, "
@@ -134,7 +134,7 @@ public class PostDaoDb implements PostDao {
                 + "expireOn = ?, "
                 + "userId = ? "
                 + "WHERE postId = ?;";
-        int updated = jdbc.update(updateQuery, 
+        int updated = jdbc.update(updateQuery,
                 post.getTitle(),
                 post.getBody(),
                 post.isApproved(),
@@ -144,12 +144,14 @@ public class PostDaoDb implements PostDao {
                 post.getExpireOn(),
                 post.getUser().getId(),
                 post.getId());
-        
+
         if (updated == 1) {
-            //delete from bridge
-            
-            //reinsert to bridge
-            
+            //delete and reinsert to bridge
+            String delBridgeQuery = "DELETE FROM postCategory "
+                    + "WHERE postId = ?;";
+            jdbc.update(delBridgeQuery, post.getId());
+            insertPostCategory(post);
+
             return post;
         } else {
             return null;
@@ -159,12 +161,21 @@ public class PostDaoDb implements PostDao {
     @Override
     @Transactional
     public boolean deletePostById(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //delete from bridge
+        String delPC = "DELETE FROM postCategory "
+                + "WHERE postId = ?;";
+        jdbc.update(delPC, id);
+
+        //delete post
+        String deletePostQuery = "DELETE FROM post "
+                + "WHERE postId = ?;";
+        return jdbc.update(deletePostQuery, id) == 1;
     }
 
     /*helpers*/
     /**
      * Retrieve the User for a Post
+     *
      * @param id {int} a valid id
      * @return {User} obj for a Post from db
      */
@@ -174,11 +185,39 @@ public class PostDaoDb implements PostDao {
                 + "WHERE p.postId = ?;";
         return jdbc.queryForObject(readQuery, new UserMapper(), id);
     }
-    
+
+    /**
+     * Retrieve Categories from db for a Post
+     *
+     * @param id {int} id for an existing Post
+     * @return {List} all categories
+     */
+    private List<Category> readCategoriesForPost(int id) {
+        String readCQuery = "SELECT c.* FROM category c "
+                + "JOIN postCategory pc ON pc.categoryId = c.categoryId "
+                + "JOIN post p ON p.postId = pc.postId "
+                + "WHERE postId = ?;";
+        return jdbc.query(readCQuery, new CategoryMapper(), id);
+    }
+
+    /**
+     * Update the postCategory bridge table
+     *
+     * @param post {Post} a well formed obj
+     */
+    private void insertPostCategory(Post post) {
+        String insertBridgeQuery = "INSERT INTO postCategory(postId, categoryId) "
+                + "VALUES(?,?);";
+
+        for (Category c : post.getCategories()) {
+            jdbc.update(insertBridgeQuery, post.getId(), c.getId());
+        }
+    }
+
     /**
      * RowMapper impl
      */
-    public static final class PostMapper implements RowMapper<Post>{
+    public static final class PostMapper implements RowMapper<Post> {
 
         @Override
         public Post mapRow(ResultSet rs, int i) throws SQLException {
@@ -191,9 +230,9 @@ public class PostDaoDb implements PostDao {
             p.setPostOn(rs.getTimestamp("postOn").toLocalDateTime());
             p.setExpireOn(rs.getTimestamp("expireOn").toLocalDateTime());
             //user and cetegory will be associated in methods
-            
+
             return p;
         }
     }
-    
+
 }
