@@ -127,9 +127,10 @@ public class PostDaoDb implements PostDao {
                 + "WHERE pc.categoryId = ?;";
         List<Post> posts = jdbc.query(readPCQuery, new PostMapper(), categoryId);
 
-        //associate users
+        //associate
         for (Post p : posts) {
             p.setUser(readUserForPost(p.getId()));
+            p.setCategories(readCategoriesForPost(p.getId()));
         }
 
         return posts;
@@ -145,9 +146,10 @@ public class PostDaoDb implements PostDao {
                 + "AND p.isApproved != 0;";
         List<Post> posts = jdbc.query(readPCQuery, new PostMapper(), categoryId);
 
-        //associate users
+        //associate
         for (Post p : posts) {
             p.setUser(readUserForPost(p.getId()));
+            p.setCategories(readCategoriesForPost(p.getId()));
         }
 
         return posts;
@@ -229,7 +231,7 @@ public class PostDaoDb implements PostDao {
         String readCQuery = "SELECT c.* FROM category c "
                 + "JOIN postCategory pc ON pc.categoryId = c.categoryId "
                 + "JOIN post p ON p.postId = pc.postId "
-                + "WHERE postId = ?;";
+                + "WHERE p.postId = ?;";
         return jdbc.query(readCQuery, new CategoryMapper(), id);
     }
 
@@ -255,6 +257,7 @@ public class PostDaoDb implements PostDao {
         @Override
         public Post mapRow(ResultSet rs, int i) throws SQLException {
             Post p = new Post();
+            p.setId(rs.getInt("postId"));
             p.setTitle(rs.getString("title"));
             p.setBody(rs.getString("body"));
             p.setApproved(rs.getBoolean("isApproved"));

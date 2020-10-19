@@ -9,16 +9,17 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import org.junit.Test;
-import static org.junit.Assert.*;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
+import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -37,8 +38,6 @@ public class PostDaoTest {
     static Role role2;
     static Role role3;
 
-    static User user1;
-    static User user2disabled;
     static User creator;
     static User admin;
 
@@ -95,32 +94,6 @@ public class PostDaoTest {
         role3 = rDao.createRole(r3);
 
         /*Create users*/
-        //just a regular user
-        User u1 = new User();
-        u1.setUsername("test1");
-        u1.setPassword("password001");
-        u1.setEnabled(true);
-        u1.setFirstName("First");
-        u1.setLastName("Tester");
-        u1.setEmail("test1@mail.com");
-        Set<Role> u1r = new HashSet<>();
-        u1r.add(role1);
-        u1.setRoles(u1r);
-        user1 = uDao.createUser(u1);
-
-        //disabled account, some nulls
-        User u2disabled = new User();
-        u2disabled.setUsername("test2disabled");
-        u2disabled.setPassword("password002");
-        u2disabled.setEnabled(false);
-        u2disabled.setFirstName("Second");
-        u2disabled.setLastName(null);
-        u2disabled.setEmail(null);
-        Set<Role> u2disabledr = new HashSet<>();
-        u2disabledr.add(role1);
-        u2disabled.setRoles(u2disabledr);
-        user2disabled = uDao.createUser(u2disabled);
-
         //content creator
         User cc = new User();
         cc.setUsername("creator");
@@ -235,6 +208,13 @@ public class PostDaoTest {
      */
     @Test
     public void testCreateReadPostByIdPost() {
+        Post post1 = pDao.createPost(p1);
+
+        Post fromDao = pDao.readPostById(post1.getId());
+
+        assertNotNull(post1);
+        assertNotNull(fromDao);
+        assertEquals(post1, fromDao);
     }
 
     /**
@@ -242,6 +222,19 @@ public class PostDaoTest {
      */
     @Test
     public void testReadAllPosts() {
+        Post post1 = pDao.createPost(p1);
+        Post post2 = pDao.createPost(p2);
+        Post post3 = pDao.createPost(p3);
+        Post post4 = pDao.createPost(p4);
+
+        List<Post> posts = pDao.readAllPosts();
+
+        assertNotNull(posts);
+        assertEquals(4, posts.size());
+        assertTrue(posts.contains(post1));
+        assertTrue(posts.contains(post2));
+        assertTrue(posts.contains(post3));
+        assertTrue(posts.contains(post4));
     }
 
     /**
@@ -249,6 +242,19 @@ public class PostDaoTest {
      */
     @Test
     public void testReadPostsByDate() {
+        Post post1 = pDao.createPost(p1);
+        Post post2 = pDao.createPost(p2);
+        Post post3 = pDao.createPost(p3);
+        Post post4 = pDao.createPost(p4);
+
+        List<Post> currentlyActive = pDao.readPostsByDate();
+
+        assertNotNull(currentlyActive);
+        assertEquals(2, currentlyActive.size());
+        assertTrue(currentlyActive.contains(post1));
+        assertTrue(currentlyActive.contains(post2));
+        assertFalse(currentlyActive.contains(post3));
+        assertFalse(currentlyActive.contains(post4));
     }
 
     /**
@@ -256,6 +262,19 @@ public class PostDaoTest {
      */
     @Test
     public void testReadPostsByApproval() {
+        Post post1 = pDao.createPost(p1);
+        Post post2 = pDao.createPost(p2);
+        Post post3 = pDao.createPost(p3);
+        Post post4 = pDao.createPost(p4);
+
+        List<Post> approved = pDao.readPostsByApproval();
+
+        assertNotNull(approved);
+        assertEquals(2, approved.size());
+        assertTrue(approved.contains(post1));
+        assertFalse(approved.contains(post2));
+        assertFalse(approved.contains(post3));
+        assertTrue(approved.contains(post4));
     }
 
     /**
@@ -263,6 +282,19 @@ public class PostDaoTest {
      */
     @Test
     public void testReadAllForPublication() {
+        Post post1 = pDao.createPost(p1);
+        Post post2 = pDao.createPost(p2);
+        Post post3 = pDao.createPost(p3);
+        Post post4 = pDao.createPost(p4);
+
+        List<Post> publishable = pDao.readAllForPublication();
+
+        assertNotNull(publishable);
+        assertEquals(2, publishable.size());
+        assertTrue(publishable.contains(post1));
+        assertFalse(publishable.contains(post2));
+        assertFalse(publishable.contains(post3));
+        assertFalse(publishable.contains(post4));
     }
 
     /**
@@ -270,78 +302,33 @@ public class PostDaoTest {
      */
     @Test
     public void testReadPostsByCategory() {
-        /*
-        Category cat1 = cDao.createCategory(c1);
-        Category cat2 = cDao.createCategory(c2);
-        Category cat3 = cDao.createCategory(c3);
+        Post post1 = pDao.createPost(p1);
+        Post post2 = pDao.createPost(p2);
+        Post post3 = pDao.createPost(p3);
+        Post post4 = pDao.createPost(p4);
 
-        List<Category> post1cat = new ArrayList<>();
-        post1cat.add(cat1);
-
-        List<Category> post2cat = new ArrayList<>();
-        post2cat.add(cat1);
-        post2cat.add(cat2);
-
-        //role
-        Role cc = new Role();
-        cc.setRole("Content Creator");
-        Role creator = rDao.createRole(cc);
-
-        Set<Role> roles = new HashSet<>();
-        roles.add(creator);
-
-        //user
-        User u1 = new User();
-        u1.setUsername("testman");
-        u1.setPassword("password");
-        u1.setEnabled(true);
-        u1.setFirstName("test");
-        u1.setLastName("man");
-        u1.setEmail("testman@mail.com");
-        u1.setRoles(roles);
-        User user = uDao.createUser(u1);
-
-        //post
-        Post p2 = new Post();
-        p2.setTitle("title1");
-        p2.setBody("body1");
-        p2.setApproved(true);
-        p2.setStaticPage(false);
-        p2.setCreatedOn(LocalDateTime.now());
-        p2.setPostOn(LocalDateTime.now());
-        p2.setExpireOn(LocalDateTime.now().plusMonths(1));
-        p2.setUser(user);
-        p2.setCategories(post1cat);
-        Post post1 = pDao.createPost(p2);
-
-        Post p1 = new Post();
-        p1.setTitle("title2");
-        p1.setBody("body2");
-        p1.setApproved(true);
-        p1.setStaticPage(true);
-        p1.setCreatedOn(LocalDateTime.now());
-        p1.setPostOn(LocalDateTime.now());
-        p1.setExpireOn(null);
-        p1.setUser(user);
-        p1.setCategories(post2cat);
-        Post post2 = pDao.createPost(p1);
-
-        List<Post> cat1posts = pDao.readPublishedPostsByCategory(cat1.getId());
-        List<Post> cat2posts = pDao.readPublishedPostsByCategory(cat2.getId());
-        List<Post> cat3posts = pDao.readPublishedPostsByCategory(cat3.getId());
+        List<Post> cat1posts = pDao.readPostsByCategory(category1.getId());
+        List<Post> cat2posts = pDao.readPostsByCategory(category2.getId());
+        List<Post> cat3posts = pDao.readPostsByCategory(category3.getId());
 
         assertNotNull(cat1posts);
-        assertEquals(2, cat1posts.size());
+        assertNotNull(cat2posts);
+        assertNotNull(cat3posts);
+        assertEquals(4, cat1posts.size());
         assertTrue(cat1posts.contains(post1));
         assertTrue(cat1posts.contains(post2));
-        
-        assertNotNull(cat2posts);
-        assertEquals(1, cat2posts.size());
+        assertTrue(cat1posts.contains(post3));
+        assertTrue(cat1posts.contains(post4));
+        assertEquals(3, cat2posts.size());
         assertTrue(cat2posts.contains(post1));
-        
-        assertNotNull(cat3posts);
-        assertEquals(0, cat3posts.size());
-         */
+        assertFalse(cat2posts.contains(post2));
+        assertTrue(cat2posts.contains(post3));
+        assertTrue(cat2posts.contains(post4));
+        assertEquals(2, cat3posts.size());
+        assertTrue(cat3posts.contains(post1));
+        assertFalse(cat3posts.contains(post2));
+        assertFalse(cat3posts.contains(post3));
+        assertTrue(cat3posts.contains(post4));
     }
 
     /**
@@ -349,6 +336,33 @@ public class PostDaoTest {
      */
     @Test
     public void testReadPublishedPostsByCategory() {
+        Post post1 = pDao.createPost(p1); //only one that will be published
+        Post post2 = pDao.createPost(p2);
+        Post post3 = pDao.createPost(p3);
+        Post post4 = pDao.createPost(p4);
+
+        List<Post> cat1posts = pDao.readPublishedPostsByCategory(category1.getId());
+        List<Post> cat2posts = pDao.readPublishedPostsByCategory(category2.getId());
+        List<Post> cat3posts = pDao.readPublishedPostsByCategory(category3.getId());
+
+        assertNotNull(cat1posts);
+        assertNotNull(cat2posts);
+        assertNotNull(cat3posts);
+        assertEquals(1, cat1posts.size());
+        assertTrue(cat1posts.contains(post1));
+        assertFalse(cat1posts.contains(post2));
+        assertFalse(cat1posts.contains(post3));
+        assertFalse(cat1posts.contains(post4));
+        assertEquals(1, cat2posts.size());
+        assertTrue(cat2posts.contains(post1));
+        assertFalse(cat2posts.contains(post2));
+        assertFalse(cat2posts.contains(post3));
+        assertFalse(cat2posts.contains(post4));
+        assertEquals(1, cat3posts.size());
+        assertTrue(cat3posts.contains(post1));
+        assertFalse(cat3posts.contains(post2));
+        assertFalse(cat3posts.contains(post3));
+        assertFalse(cat3posts.contains(post4));
     }
 
     /**
@@ -356,6 +370,21 @@ public class PostDaoTest {
      */
     @Test
     public void testUpdatePost() {
+        Post post1 = pDao.createPost(p1);
+        Post original = pDao.readPostById(post1.getId());
+
+        post1.setBody("This is the edited body to the post i hope this test passes");
+        post1.setApproved(false);
+        post1.setExpireOn(LocalDateTime.now().plusDays(5));
+
+        Post post1update = pDao.updatePost(post1);
+        Post edit = pDao.readPostById(post1.getId());
+
+        assertNotNull(original);
+        assertNotNull(post1update);
+        assertNotNull(edit);
+        assertNotEquals(original, edit);
+        assertEquals(post1update, edit);
     }
 
     /**
@@ -363,6 +392,22 @@ public class PostDaoTest {
      */
     @Test
     public void testDeletePostById() {
+        Post post1 = pDao.createPost(p1);
+        Post post2 = pDao.createPost(p2);
+        Post post3 = pDao.createPost(p3);
+        Post post4 = pDao.createPost(p4);
+        List<Post> original = pDao.readAllPosts();
+
+        boolean deleted = pDao.deletePostById(post1.getId());
+        List<Post> afterDel = pDao.readAllPosts();
+
+        assertEquals(4, original.size());
+        assertEquals(3, afterDel.size());
+        assertTrue(deleted);
+        assertFalse(afterDel.contains(post1));
+        assertTrue(afterDel.contains(post2));
+        assertTrue(afterDel.contains(post3));
+        assertTrue(afterDel.contains(post4));
     }
 
 }

@@ -46,7 +46,7 @@ public interface PostDao {
     List<Post> readPostsByApproval();
 
     /**
-     * Retrieve all Posts that can be posted on a given day - meets approval
+     * Retrieve all Posts that can be posted on today - meets approval
      * status and active date range requirements
      *
      * @return {List} all posts that can be published/rendered on load
