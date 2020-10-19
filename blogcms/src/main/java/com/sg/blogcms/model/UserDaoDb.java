@@ -77,6 +77,21 @@ public class UserDaoDb implements UserDao {
     }
 
     @Override
+    public User readEnabledUserByUsername(String username) {
+        try {
+            String readQuery = "SELECT * FROM user "
+                    + "WHERE username = ? "
+                    + "AND isEnabled != 0;";
+            User user = jdbc.queryForObject(readQuery, new UserMapper(), username);
+            user.setRoles(readRolesForUser(user.getId()));
+
+            return user;
+        } catch (DataAccessException e) {
+            return null;
+        }
+    }
+
+    @Override
     public List<User> readAllUsers() {
         String readAllQuery = "SELECT * FROM user;";
         List<User> users = jdbc.query(readAllQuery, new UserMapper());
@@ -146,7 +161,7 @@ public class UserDaoDb implements UserDao {
         String delUR = "DELETE FROM userRole "
                 + "WHERE userId = ?;";
         jdbc.update(delUR, id);
-        
+
         /*delete post*/
         //bridge
         /*
@@ -154,13 +169,13 @@ public class UserDaoDb implements UserDao {
                 + "JOIN post p ON p.postId = pc.postId "
                 + "JOIN user u ON u.userId = p.userId "
                 + "WHERE u.userId = ?;";
-        */
+         */
         String delPC = "DELETE FROM postCategory "
                 + "WHERE postId IN "
                 + "(SELECT postId FROM post "
                 + "WHERE userId = ?);";
         jdbc.update(delPC, id);
-        
+
         //actual posts
         String delP = "DELETE FROM post "
                 + "WHERE userId = ?;";

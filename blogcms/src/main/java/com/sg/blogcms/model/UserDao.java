@@ -30,6 +30,14 @@ public interface UserDao {
     User readUserByUsername(String username);
 
     /**
+     * Retrieve an active user from db by their username
+     *
+     * @param username {String} a valid username
+     * @return {User} obj from db, null otherwise
+     */
+    User readEnabledUserByUsername(String username);
+
+    /**
      * Retrieve all users from db, regardless of activation status
      *
      * @return {List} all user obj's from db
