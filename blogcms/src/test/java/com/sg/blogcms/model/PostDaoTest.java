@@ -34,21 +34,21 @@ public class PostDaoTest {
     @Autowired
     PostDao pDao;
 
-    static Role role1;
-    static Role role2;
-    static Role role3;
+    Role role1;
+    Role role2;
+    Role role3;
 
-    static User creator;
-    static User admin;
+    User creator;
+    User admin;
 
-    static Category category1;
-    static Category category2;
-    static Category category3;
+    Category category1;
+    Category category2;
+    Category category3;
 
-    static Post p1;
-    static Post p2;
-    static Post p3;
-    static Post p4;
+    Post p1;
+    Post p2;
+    Post p3;
+    Post p4;
 
     public PostDaoTest() {
     }

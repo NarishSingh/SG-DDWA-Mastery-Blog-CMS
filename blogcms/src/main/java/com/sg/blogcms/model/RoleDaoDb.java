@@ -74,30 +74,6 @@ public class RoleDaoDb implements RoleDao {
     @Override
     @Transactional
     public boolean deleteRoleById(int id) {
-        //FIXME ask Randy if a role deletion also means all users are deleted
-        /*
-        //delete from post category bridge
-        String delPC = "DELETE FROM postCategory pc "
-                + "JOIN post p ON p.postId = pc.postId "
-                + "JOIN user u ON u.userId = p.userId "
-                + "JOIN userRole ur ON ur.userId = u.userId "
-                + "WHERE ur.roleId = ?;";
-        jdbc.update(delPC, id);
-
-        //delete from post
-        String delP = "DELETE FROM post p "
-                + "JOIN user u ON u.postId = p.postId "
-                + "JOIN userRole ur ON ur.userId = u.userId "
-                + "WHERE ur.roleId = ?;";
-        jdbc.update(delP, id);
-
-        //delete from user
-        String delU = "DELETE FROM user u "
-                + "JOIN userRole ur ON ur.userId = u.userId "
-                + "WHERE ur.roleId = ?;";
-        jdbc.update(delU, id);
-        */
-
         //delete from user role
         String delUR = "DELETE FROM userRole "
                 + "WHERE roleId = ?;";

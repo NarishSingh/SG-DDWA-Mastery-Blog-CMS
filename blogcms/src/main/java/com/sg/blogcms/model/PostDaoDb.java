@@ -32,9 +32,9 @@ public class PostDaoDb implements PostDao {
                 post.getBody(),
                 post.isApproved(),
                 post.isStaticPage(),
-                post.getCreatedOn(),
-                post.getPostOn(),
-                post.getExpireOn(),
+                post.getCreatedOn().withNano(0),
+                post.getPostOn().withNano(0),
+                post.getExpireOn().withNano(0),
                 post.getUser().getId());
 
         //set id from db
@@ -53,7 +53,7 @@ public class PostDaoDb implements PostDao {
             String readQuery = "SELECT * FROM post "
                     + "WHERE postId = ?;";
             Post post = jdbc.queryForObject(readQuery, new PostMapper(), id);
-            post.setUser(readUserForPost(post.getId()));
+            post.setUser(readUserForPost(id));
             post.setCategories(readCategoriesForPost(id));
 
             return post;
@@ -77,6 +77,8 @@ public class PostDaoDb implements PostDao {
 
     @Override
     public List<Post> readPostsByDate() {
+        //FIXME THIS WILL BE A PROBLEM IF EXPIRE ON IS NULLABLE
+        //CONSIDER AN IF STATEMENT
         String readActivePosts = "SELECT * FROM post "
                 + "WHERE postOn <= NOW() "
                 + "AND expireOn >= NOW();";

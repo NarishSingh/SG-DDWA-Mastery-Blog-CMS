@@ -101,17 +101,17 @@ public class Post {
     /*testing*/
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 67 * hash + this.id;
-        hash = 67 * hash + Objects.hashCode(this.title);
-        hash = 67 * hash + Objects.hashCode(this.body);
-        hash = 67 * hash + (this.approved ? 1 : 0);
-        hash = 67 * hash + (this.staticPage ? 1 : 0);
-        hash = 67 * hash + Objects.hashCode(this.createdOn);
-        hash = 67 * hash + Objects.hashCode(this.postOn);
-        hash = 67 * hash + Objects.hashCode(this.expireOn);
-        hash = 67 * hash + Objects.hashCode(this.user);
-        hash = 67 * hash + Objects.hashCode(this.categories);
+        int hash = 3;
+        hash = 29 * hash + this.id;
+        hash = 29 * hash + Objects.hashCode(this.title);
+        hash = 29 * hash + Objects.hashCode(this.body);
+        hash = 29 * hash + (this.approved ? 1 : 0);
+        hash = 29 * hash + (this.staticPage ? 1 : 0);
+        hash = 29 * hash + Objects.hashCode(this.createdOn);
+        hash = 29 * hash + Objects.hashCode(this.postOn);
+        hash = 29 * hash + Objects.hashCode(this.expireOn);
+        hash = 29 * hash + Objects.hashCode(this.user);
+        hash = 29 * hash + Objects.hashCode(this.categories);
         return hash;
     }
 

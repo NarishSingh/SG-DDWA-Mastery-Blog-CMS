@@ -46,7 +46,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
      */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        //TODO authorize pages for user -> view only, content creator -> view and create, and admin -> all
+        //TODO authorize pages for content creator -> view and create, and admin -> all
         super.configure(http); //To change body of generated methods, choose Tools | Templates.
     }
 
