@@ -18,23 +18,29 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Autowired
     UserDao users;
-    
+
     /**
-     * Converts a user obj into a spring secured user obj
+     * Converts a user obj into a spring secured user obj, now updated to only
+     * allow enabled users
+     *
      * @param username
      * @return
-     * @throws UsernameNotFoundException 
+     * @throws UsernameNotFoundException
      */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = users.getUserByUsername(username);
-        
-        Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
-        for(Role role : user.getRoles()) {
-            grantedAuthorities.add(new SimpleGrantedAuthority(role.getRole()));
+        User user = users.getActiveUserByUsername(username);
+
+        if (user != null) {
+            Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
+            for (Role role : user.getRoles()) {
+                grantedAuthorities.add(new SimpleGrantedAuthority(role.getRole()));
+            }
+
+            return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), grantedAuthorities);
         }
-        
-        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), grantedAuthorities);
+
+        return null;
     }
-    
+
 }
