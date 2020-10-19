@@ -5,6 +5,7 @@ import com.sg.blogcms.entity.Post;
 import com.sg.blogcms.entity.Role;
 import com.sg.blogcms.entity.User;
 import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -137,15 +138,16 @@ public class PostDaoTest {
         category3 = cDao.createCategory(c3);
 
         /*Create posts*/
-        //by admin, approved, static, post now -> no expiration
+        //FOR NO EXPIRE -> set to 12-31-9999, MySQL cannot take java's .MAX
+        //by admin, approved, static, post now, never expires -> no expiration
         p1 = new Post();
         p1.setTitle("title1");
         p1.setBody("body1");
         p1.setApproved(true);
         p1.setStaticPage(true);
-        p1.setCreatedOn(LocalDateTime.now());
-        p1.setPostOn(LocalDateTime.now());
-        p1.setExpireOn(null);
+        p1.setCreatedOn(LocalDateTime.now().withNano(0));
+        p1.setPostOn(LocalDateTime.now().withNano(0));
+        p1.setExpireOn(LocalDateTime.of(9999, Month.DECEMBER, 31, 0, 0));
         p1.setUser(admin);
         List<Category> post1cat = new ArrayList<>();
         post1cat.add(category1);
@@ -159,9 +161,9 @@ public class PostDaoTest {
         p2.setBody("body2");
         p2.setApproved(false);
         p2.setStaticPage(false);
-        p2.setCreatedOn(LocalDateTime.now());
-        p2.setPostOn(LocalDateTime.now());
-        p2.setExpireOn(LocalDateTime.now().plusMonths(1));
+        p2.setCreatedOn(LocalDateTime.now().withNano(0));
+        p2.setPostOn(LocalDateTime.now().withNano(0));
+        p2.setExpireOn(LocalDateTime.now().plusMonths(1).withNano(0));
         p2.setUser(creator);
         List<Category> post2cat = new ArrayList<>();
         post2cat.add(category1);
@@ -173,9 +175,9 @@ public class PostDaoTest {
         p3.setBody("body3");
         p3.setApproved(false);
         p3.setStaticPage(false);
-        p3.setCreatedOn(LocalDateTime.now());
-        p3.setPostOn(LocalDateTime.now().plusMonths(1));
-        p3.setExpireOn(null);
+        p3.setCreatedOn(LocalDateTime.now().withNano(0));
+        p3.setPostOn(LocalDateTime.now().plusMonths(1).withNano(0));
+        p3.setExpireOn(LocalDateTime.of(9999, Month.DECEMBER, 31, 0, 0));
         p3.setUser(admin);
         List<Category> post3cat = new ArrayList<>();
         post3cat.add(category1);
@@ -188,9 +190,9 @@ public class PostDaoTest {
         p4.setBody("body4");
         p4.setApproved(true);
         p4.setStaticPage(true);
-        p4.setCreatedOn(LocalDateTime.now());
-        p4.setPostOn(LocalDateTime.now().plusMonths(1));
-        p4.setExpireOn(LocalDateTime.now().plusMonths(2));
+        p4.setCreatedOn(LocalDateTime.now().withNano(0));
+        p4.setPostOn(LocalDateTime.now().plusMonths(1).withNano(0));
+        p4.setExpireOn(LocalDateTime.now().plusMonths(2).withNano(0));
         p4.setUser(creator);
         List<Category> post4cat = new ArrayList<>();
         post4cat.add(category1);
@@ -290,7 +292,7 @@ public class PostDaoTest {
         List<Post> publishable = pDao.readAllForPublication();
 
         assertNotNull(publishable);
-        assertEquals(2, publishable.size());
+        assertEquals(1, publishable.size());
         assertTrue(publishable.contains(post1));
         assertFalse(publishable.contains(post2));
         assertFalse(publishable.contains(post3));
@@ -375,7 +377,7 @@ public class PostDaoTest {
 
         post1.setBody("This is the edited body to the post i hope this test passes");
         post1.setApproved(false);
-        post1.setExpireOn(LocalDateTime.now().plusDays(5));
+        post1.setExpireOn(LocalDateTime.now().plusDays(5).withNano(0));
 
         Post post1update = pDao.updatePost(post1);
         Post edit = pDao.readPostById(post1.getId());

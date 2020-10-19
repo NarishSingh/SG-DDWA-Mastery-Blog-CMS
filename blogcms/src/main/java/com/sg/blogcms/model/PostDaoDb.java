@@ -2,12 +2,16 @@ package com.sg.blogcms.model;
 
 import com.sg.blogcms.entity.Category;
 import com.sg.blogcms.entity.Post;
+import com.sg.blogcms.entity.Role;
 import com.sg.blogcms.entity.User;
 import com.sg.blogcms.model.CategoryDaoDb.CategoryMapper;
+import com.sg.blogcms.model.RoleDaoDb.RoleMapper;
 import com.sg.blogcms.model.UserDaoDb.UserMapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -32,9 +36,9 @@ public class PostDaoDb implements PostDao {
                 post.getBody(),
                 post.isApproved(),
                 post.isStaticPage(),
-                post.getCreatedOn().withNano(0),
-                post.getPostOn().withNano(0),
-                post.getExpireOn().withNano(0),
+                post.getCreatedOn(),
+                post.getPostOn(),
+                post.getExpireOn(),
                 post.getUser().getId());
 
         //set id from db
@@ -211,16 +215,26 @@ public class PostDaoDb implements PostDao {
 
     /*helpers*/
     /**
-     * Retrieve the User for a Post
+     * Retrieve the User for a Post and associate its roles from db
      *
      * @param id {int} a valid id
      * @return {User} obj for a Post from db
      */
     private User readUserForPost(int id) throws DataAccessException {
+        //read user
         String readQuery = "SELECT u.* FROM user u "
                 + "JOIN post p ON p.userId = u.userId "
                 + "WHERE p.postId = ?;";
-        return jdbc.queryForObject(readQuery, new UserMapper(), id);
+        User u = jdbc.queryForObject(readQuery, new UserMapper(), id);
+
+        //read and associate roles
+        String selectRolesQuery = "SELECT r.* FROM userRole ur "
+                + "JOIN role r ON r.roleId = ur.roleId "
+                + "WHERE ur.userId = ?;";
+        Set<Role> userRoles = new HashSet<>(jdbc.query(selectRolesQuery, new RoleMapper(), u.getId()));
+        u.setRoles(userRoles);
+
+        return u;
     }
 
     /**

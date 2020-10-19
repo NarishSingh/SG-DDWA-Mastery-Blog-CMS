@@ -13,7 +13,7 @@ public class Post {
     private boolean staticPage;
     private LocalDateTime createdOn;
     private LocalDateTime postOn;
-    private LocalDateTime expireOn; //nullable
+    private LocalDateTime expireOn;
     private User user;
     private List<Category> categories;
 
