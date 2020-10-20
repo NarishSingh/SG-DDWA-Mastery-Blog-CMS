@@ -43,20 +43,19 @@ body {
 
 .sidebar .nav-link {
     font-weight: 500;
-    color: #333;
-}
-
-.sidebar .nav-link .feather {
     margin-right: 4px;
     color: #999;
+}
+
+.sidebar .nav-link i {
+    margin-right: 2px;
 }
 
 .sidebar .nav-link.active {
     color: #007bff;
 }
 
-.sidebar .nav-link:hover .feather,
-.sidebar .nav-link.active .feather {
+.sidebar .nav-link:hover {
     color: inherit;
 }
 
@@ -97,7 +96,7 @@ body {
 }
 
 /*add user form*/
-#add-user-form-container {
+#add-user-form {
     display: grid;
     grid-template-columns: 50% 50%;
     width: 100%;
