@@ -94,34 +94,37 @@
                 <div>
                     <form action="addUser" class="form-horizontal" method="post">
                         <!--FIXME make into two boxes, where the inputs overflow into the right-->
-                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                        <input type="hidden" class="form-control" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
 
                         <div class="form-group">
                             <label for="username">Username:</label>
-                            <input type="text" id="username" name="username" required autofocus>
+                            <input type="text" class="form-control" id="username" name="username" required autofocus>
                         </div>
 
                         <div class="form-group">
                             <label for="password">Password:</label>
-                            <input type="text" id="password" name="password" required>
+                            <input type="text" class="form-control" id="password" name="password" required>
                         </div>
 
                         <div class="form-group">
                             <label for="firstName">First Name:</label>
-                            <input type="text" id="firstName" name="firstName">
+                            <input type="text" class="form-control" id="firstName" name="firstName">
                         </div>
 
                         <div class="form-group">
                             <label for="lastName">Last Name:</label>
-                            <input type="text" id="lastName" name="lastName">
+                            <input type="text" class="form-control" id="lastName" name="lastName">
                         </div>
 
                         <div class="form-group">
                             <label for="email">E-mail:</label>
-                            <input type="text" id="email" name="email">
+                            <input type="text" class="form-control" id="email" name="email">
                         </div>
 
-                        <!--FIXME add a drop down for admin vs content creator-->
+                        <label for="role">Role:</label>
+                        <select name="roleId" id="role" class="form-control">
+                            <option th:each="role: ${roles}" th:value="${role.id}" th:text="${role.role}">role</option>
+                        </select>
 
                         <button type="submit" class="btn btn-outline-dark">Add Account</button>
                     </form>
