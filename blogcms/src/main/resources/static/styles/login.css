@@ -59,8 +59,13 @@ body {
 }
 
 /*FORM*/
-h3, .form-horizontal {
+.container {
     text-align: center;
+}
+
+form {
+    /*justify-items: center;*/
+    width: 100%;
 }
 
 /*Footer*/

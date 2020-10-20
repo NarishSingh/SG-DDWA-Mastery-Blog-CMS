@@ -95,3 +95,17 @@ body {
     border-color: transparent;
     box-shadow: 0 0 0 3px rgba(255, 255, 255, .25);
 }
+
+/*add user form*/
+#add-user-form-container {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    width: 100%;
+}
+
+/*FIXME test only, remove later <img src="../static/testImage.jpg" alt="bird">*/
+/*
+img {
+    width: 500px;
+}
+ */
