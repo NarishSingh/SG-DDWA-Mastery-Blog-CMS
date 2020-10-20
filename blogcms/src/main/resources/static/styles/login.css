@@ -1,3 +1,4 @@
+/*login*/
 /*links*/
 a, a:focus, a:hover {
     color: #fff;
@@ -55,6 +56,11 @@ body {
     .nav-masthead {
         float: right;
     }
+}
+
+/*FORM*/
+h3, .form-horizontal {
+    text-align: center;
 }
 
 /*Footer*/

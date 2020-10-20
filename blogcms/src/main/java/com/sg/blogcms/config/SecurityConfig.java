@@ -66,6 +66,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutSuccessUrl("/") //on log out, go to base page
                 .permitAll();
 */
+        
+        //FIXME drafting only, remove for production
+        http.authorizeRequests()
+                .anyRequest().permitAll()
+                .and()
+                .formLogin()
+                .loginPage("/login")
+                .failureUrl("/login?login_error=1") //if login fails, go to this url
+                .permitAll()
+                .and()
+                .logout()
+                .logoutSuccessUrl("/") //on log out, go to base page
+                .permitAll();
     }
 
 }
