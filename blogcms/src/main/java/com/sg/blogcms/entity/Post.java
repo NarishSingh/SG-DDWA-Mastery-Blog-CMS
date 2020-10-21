@@ -36,6 +36,8 @@ public class Post {
     @NotNull(message = "Please indicate the user who authored post")
     private User user;
 
+    private String photoFilename;
+    
     private List<Category> categories;
 
     /*gs*/
@@ -111,6 +113,14 @@ public class Post {
         this.user = user;
     }
 
+    public String getPhotoFilename() {
+        return photoFilename;
+    }
+
+    public void setPhotoFilename(String photoFilename) {
+        this.photoFilename = photoFilename;
+    }
+
     public List<Category> getCategories() {
         return categories;
     }
@@ -123,16 +133,17 @@ public class Post {
     @Override
     public int hashCode() {
         int hash = 3;
-        hash = 29 * hash + this.id;
-        hash = 29 * hash + Objects.hashCode(this.title);
-        hash = 29 * hash + Objects.hashCode(this.body);
-        hash = 29 * hash + (this.approved ? 1 : 0);
-        hash = 29 * hash + (this.staticPage ? 1 : 0);
-        hash = 29 * hash + Objects.hashCode(this.createdOn);
-        hash = 29 * hash + Objects.hashCode(this.postOn);
-        hash = 29 * hash + Objects.hashCode(this.expireOn);
-        hash = 29 * hash + Objects.hashCode(this.user);
-        hash = 29 * hash + Objects.hashCode(this.categories);
+        hash = 37 * hash + this.id;
+        hash = 37 * hash + Objects.hashCode(this.title);
+        hash = 37 * hash + Objects.hashCode(this.body);
+        hash = 37 * hash + (this.approved ? 1 : 0);
+        hash = 37 * hash + (this.staticPage ? 1 : 0);
+        hash = 37 * hash + Objects.hashCode(this.createdOn);
+        hash = 37 * hash + Objects.hashCode(this.postOn);
+        hash = 37 * hash + Objects.hashCode(this.expireOn);
+        hash = 37 * hash + Objects.hashCode(this.user);
+        hash = 37 * hash + Objects.hashCode(this.photoFilename);
+        hash = 37 * hash + Objects.hashCode(this.categories);
         return hash;
     }
 
@@ -163,6 +174,9 @@ public class Post {
         if (!Objects.equals(this.body, other.body)) {
             return false;
         }
+        if (!Objects.equals(this.photoFilename, other.photoFilename)) {
+            return false;
+        }
         if (!Objects.equals(this.createdOn, other.createdOn)) {
             return false;
         }
@@ -183,10 +197,11 @@ public class Post {
 
     @Override
     public String toString() {
-        return "Post{" + "id=" + id + ", title=" + title + ", body=" + body
-                + ", approved=" + approved + ", staticPage=" + staticPage
-                + ", createdOn=" + createdOn + ", postOn=" + postOn + ", expireOn="
-                + expireOn + ", user=" + user + ", categories=" + categories + '}';
+        return "Post{" + "id=" + id + ", title=" + title + ", body=" + body 
+                + ", approved=" + approved + ", staticPage=" + staticPage 
+                + ", createdOn=" + createdOn + ", postOn=" + postOn + ", expireOn=" 
+                + expireOn + ", user=" + user + ", photoFilename=" + photoFilename 
+                + ", categories=" + categories + '}';
     }
-
+    
 }

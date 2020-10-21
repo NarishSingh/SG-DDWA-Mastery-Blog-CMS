@@ -30,6 +30,8 @@ public class User {
     @Size(max = 50, message = "Email must be well formed, and less than 50 characters in length")
     private String email;
 
+    private String photoFilename;
+    
     private Set<Role> roles;
 
     /*gs*/
@@ -89,6 +91,14 @@ public class User {
         this.email = email;
     }
 
+    public String getPhotoFilename() {
+        return photoFilename;
+    }
+
+    public void setPhotoFilename(String photoFilename) {
+        this.photoFilename = photoFilename;
+    }
+
     public Set<Role> getRoles() {
         return roles;
     }
@@ -101,14 +111,15 @@ public class User {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 53 * hash + this.id;
-        hash = 53 * hash + Objects.hashCode(this.username);
-        hash = 53 * hash + Objects.hashCode(this.password);
-        hash = 53 * hash + (this.enabled ? 1 : 0);
-        hash = 53 * hash + Objects.hashCode(this.firstName);
-        hash = 53 * hash + Objects.hashCode(this.lastName);
-        hash = 53 * hash + Objects.hashCode(this.email);
-        hash = 53 * hash + Objects.hashCode(this.roles);
+        hash = 97 * hash + this.id;
+        hash = 97 * hash + Objects.hashCode(this.username);
+        hash = 97 * hash + Objects.hashCode(this.password);
+        hash = 97 * hash + (this.enabled ? 1 : 0);
+        hash = 97 * hash + Objects.hashCode(this.firstName);
+        hash = 97 * hash + Objects.hashCode(this.lastName);
+        hash = 97 * hash + Objects.hashCode(this.email);
+        hash = 97 * hash + Objects.hashCode(this.photoFilename);
+        hash = 97 * hash + Objects.hashCode(this.roles);
         return hash;
     }
 
@@ -145,6 +156,9 @@ public class User {
         if (!Objects.equals(this.email, other.email)) {
             return false;
         }
+        if (!Objects.equals(this.photoFilename, other.photoFilename)) {
+            return false;
+        }
         if (!Objects.equals(this.roles, other.roles)) {
             return false;
         }
@@ -153,10 +167,10 @@ public class User {
 
     @Override
     public String toString() {
-        return "User{" + "id=" + id + ", username=" + username + ", password="
-                + password + ", enabled=" + enabled + ", firstName=" + firstName
-                + ", lastName=" + lastName + ", email=" + email + ", roles="
-                + roles + '}';
+        return "User{" + "id=" + id + ", username=" + username + ", password=" 
+                + password + ", enabled=" + enabled + ", firstName=" + firstName 
+                + ", lastName=" + lastName + ", email=" + email + ", photoFilename=" 
+                + photoFilename + ", roles=" + roles + '}';
     }
-
+    
 }

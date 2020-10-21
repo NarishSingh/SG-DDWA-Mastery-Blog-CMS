@@ -15,7 +15,8 @@ CREATE TABLE `user` (
     isEnabled BIT NOT NULL DEFAULT 0,
     firstName VARCHAR(50),
     lastName VARCHAR(50),
-    email VARCHAR(50)
+    email VARCHAR(50),
+    photoFilename VARCHAR(255)
 );
 
 -- bridge table
@@ -38,6 +39,7 @@ CREATE TABLE post (
     createdOn DATETIME NOT NULL DEFAULT NOW(),
     postOn DATETIME NOT NULL,
     expireOn DATETIME NOT NULL,
+    photoFilename VARCHAR(255),
     userId INT NOT NULL,
     CONSTRAINT `fk_user_post` FOREIGN KEY (userId)
         REFERENCES `user` (userId)
