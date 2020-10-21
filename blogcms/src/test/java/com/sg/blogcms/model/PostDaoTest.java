@@ -102,6 +102,7 @@ public class PostDaoTest {
         cc.setFirstName("First");
         cc.setLastName("Creator");
         cc.setEmail("test3@mail.com");
+        cc.setPhotoFilename(null);
         Set<Role> ccr = new HashSet<>();
         ccr.add(role1);
         ccr.add(role2);
@@ -116,6 +117,7 @@ public class PostDaoTest {
         adm.setFirstName("The");
         adm.setLastName("Admin");
         adm.setEmail("admin@mail.com");
+        adm.setPhotoFilename(null);
         Set<Role> ar = new HashSet<>();
         ar.add(role1);
         ar.add(role2);
@@ -147,6 +149,7 @@ public class PostDaoTest {
         p1.setCreatedOn(LocalDateTime.now().withNano(0));
         p1.setPostOn(LocalDateTime.now().withNano(0));
         p1.setExpireOn(LocalDateTime.of(9999, Month.DECEMBER, 31, 0, 0));
+        p1.setPhotoFilename(null);
         p1.setUser(admin);
         List<Category> post1cat = new ArrayList<>();
         post1cat.add(category1);
@@ -163,6 +166,7 @@ public class PostDaoTest {
         p2.setCreatedOn(LocalDateTime.now().withNano(0));
         p2.setPostOn(LocalDateTime.now().withNano(0));
         p2.setExpireOn(LocalDateTime.now().plusMonths(1).withNano(0));
+        p2.setPhotoFilename(null);
         p2.setUser(creator);
         List<Category> post2cat = new ArrayList<>();
         post2cat.add(category1);
@@ -177,6 +181,7 @@ public class PostDaoTest {
         p3.setCreatedOn(LocalDateTime.now().withNano(0));
         p3.setPostOn(LocalDateTime.now().plusMonths(1).withNano(0));
         p3.setExpireOn(LocalDateTime.of(9999, Month.DECEMBER, 31, 0, 0));
+        p3.setPhotoFilename(null);
         p3.setUser(admin);
         List<Category> post3cat = new ArrayList<>();
         post3cat.add(category1);
@@ -192,6 +197,7 @@ public class PostDaoTest {
         p4.setCreatedOn(LocalDateTime.now().withNano(0));
         p4.setPostOn(LocalDateTime.now().plusMonths(1).withNano(0));
         p4.setExpireOn(LocalDateTime.now().plusMonths(2).withNano(0));
+        p4.setPhotoFilename(null);
         p4.setUser(creator);
         List<Category> post4cat = new ArrayList<>();
         post4cat.add(category1);

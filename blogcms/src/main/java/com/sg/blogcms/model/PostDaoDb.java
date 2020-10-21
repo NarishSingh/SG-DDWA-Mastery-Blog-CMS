@@ -29,8 +29,8 @@ public class PostDaoDb implements PostDao {
     @Transactional
     public Post createPost(Post post) {
         //insert
-        String insertQuery = "INSERT INTO post(title, body, isApproved, isStaticPage, createdOn, postOn, expireOn, userId) "
-                + "VALUES(?,?,?,?,?,?,?,?);";
+        String insertQuery = "INSERT INTO post(title, body, isApproved, isStaticPage, createdOn, postOn, expireOn, photoFilename, userId) "
+                + "VALUES(?,?,?,?,?,?,?,?,?);";
         jdbc.update(insertQuery,
                 post.getTitle(),
                 post.getBody(),
@@ -39,6 +39,7 @@ public class PostDaoDb implements PostDao {
                 post.getCreatedOn(),
                 post.getPostOn(),
                 post.getExpireOn(),
+                post.getPhotoFilename(),
                 post.getUser().getId());
 
         //set id from db
@@ -173,6 +174,7 @@ public class PostDaoDb implements PostDao {
                 + "createdOn = ?, "
                 + "postOn = ?, "
                 + "expireOn = ?, "
+                + "photoFilename = ?, "
                 + "userId = ? "
                 + "WHERE postId = ?;";
         int updated = jdbc.update(updateQuery,
@@ -183,6 +185,7 @@ public class PostDaoDb implements PostDao {
                 post.getCreatedOn(),
                 post.getPostOn(),
                 post.getExpireOn(),
+                post.getPhotoFilename(),
                 post.getUser().getId(),
                 post.getId());
 
@@ -281,6 +284,7 @@ public class PostDaoDb implements PostDao {
             p.setCreatedOn(rs.getTimestamp("createdOn").toLocalDateTime());
             p.setPostOn(rs.getTimestamp("postOn").toLocalDateTime());
             p.setExpireOn(rs.getTimestamp("expireOn").toLocalDateTime());
+            p.setPhotoFilename(rs.getString("photoFilename"));
             //user and cetegory will be associated in methods
 
             return p;
