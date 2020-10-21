@@ -2,8 +2,11 @@ package com.sg.blogcms.controllers;
 
 import com.sg.blogcms.entity.Role;
 import com.sg.blogcms.entity.User;
+import com.sg.blogcms.model.ImageDao;
 import com.sg.blogcms.model.RoleDao;
 import com.sg.blogcms.model.UserDao;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.HashSet;
 import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
@@ -16,6 +19,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 public class AdminController {
@@ -25,7 +30,10 @@ public class AdminController {
     @Autowired
     UserDao uDao;
     @Autowired
+    ImageDao iDao;
+    @Autowired
     PasswordEncoder encoder;
+    private final String userUploadDir = "Users";
     Set<ConstraintViolation<User>> violations = new HashSet<>();
 
     /*MAIN*/
@@ -53,7 +61,9 @@ public class AdminController {
      * @return {String} reload admin subdomain
      */
     @PostMapping("/addUser")
-    public String addUser(HttpServletRequest request) {
+    public String addUser(HttpServletRequest request, @RequestParam("file") MultipartFile file) {
+        String filePath = iDao.saveImage(file, Long.toString(LocalDateTime.now().toEpochSecond(ZoneOffset.UTC)), userUploadDir);
+        
         User user = new User();
         String usernameString = request.getParameter("username");
         String passwordString = request.getParameter("password");
@@ -67,6 +77,7 @@ public class AdminController {
             user.setFirstName(request.getParameter("firstName"));
             user.setLastName(request.getParameter("lastName"));
             user.setEmail(request.getParameter("email"));
+            user.setPassword(filePath);
 
             Set<Role> userRoles = new HashSet<>();
             userRoles.add(rDao.readRoleById(Integer.parseInt(request.getParameter("roleId"))));

@@ -93,39 +93,46 @@
             <h2>Create Account</h2>
             <div class="d-flex" id="add-user-form">
                 <div>
-                    <form action="addUser" class="form-horizontal" method="post">
+                    <form action="addUser" class="form-horizontal" method="post" enctype="multipart/form-data">
                         <!--FIXME make into two boxes, where the inputs overflow into the right-->
-                        <input type="hidden" class="form-control" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                        <input type="hidden" class="form-control" th:name="${_csrf.parameterName}"
+                               th:value="${_csrf.token}">
 
                         <div class="form-group">
-                            <label for="username">Username:</label>
+                            <label for="username" class="col-form-label">Username:</label>
                             <input type="text" class="form-control" id="username" name="username" required autofocus>
                         </div>
 
                         <div class="form-group">
-                            <label for="password">Password:</label>
+                            <label for="password" class="col-form-label">Password:</label>
                             <input type="text" class="form-control" id="password" name="password" required>
                         </div>
 
                         <div class="form-group">
-                            <label for="firstName">First Name:</label>
+                            <label for="firstName" class="col-form-label">First Name:</label>
                             <input type="text" class="form-control" id="firstName" name="firstName">
                         </div>
 
                         <div class="form-group">
-                            <label for="lastName">Last Name:</label>
+                            <label for="lastName" class="col-form-label">Last Name:</label>
                             <input type="text" class="form-control" id="lastName" name="lastName">
                         </div>
 
                         <div class="form-group">
-                            <label for="email">E-mail:</label>
+                            <label for="email" class="col-form-label">E-mail:</label>
                             <input type="text" class="form-control" id="email" name="email">
                         </div>
 
-                        <label for="role">Role:</label>
+                        <label for="role" class="col-form-label">Role:</label>
                         <select name="roleId" id="role" class="form-control">
                             <option th:each="role: ${roles}" th:value="${role.id}" th:text="${role.role}">role</option>
                         </select>
+
+                        <!--image upload-->
+                        <div class="form-group">
+                            <label for="file" class="col-form-label">Profile Picture:</label>
+                            <input type="file" class="form-control-file" name="file" id="file">
+                        </div>
 
                         <button type="submit" class="btn btn-outline-dark">Add Account</button>
                     </form>
@@ -142,6 +149,7 @@
                     <tr>
                         <th>Username</th>
                         <th>Name</th>
+                        <th>Picture</th>
                         <th>Role</th>
                         <th>Enabled?</th>
                         <th></th> <!--Edit-->
@@ -154,9 +162,12 @@
                         <tr>
                             <td th:text="${user.username}">username</td>
                             <td th:text="${user.firstName + ' ' + user.lastName}">name</td>
+                            <td><img th:src="${user.photoFilename}" alt="Profile Picture"
+                                     style="height: 50px; padding: 0; margin: 0;"></td>
                             <td>
                                 <div th:each="currentRole : ${user.roles}">
                                     <span th:text="currentRole.role"></span>
+                                    <!--only one role, until regular users are implemented-->
                                 </div>
                             </td>
                             <td th:text="${user.enabled}">enabled</td>
