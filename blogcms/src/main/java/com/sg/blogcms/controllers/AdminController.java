@@ -8,6 +8,7 @@ import com.sg.blogcms.model.UserDao;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.ConstraintViolation;
@@ -58,12 +59,13 @@ public class AdminController {
      *
      * @param request {HttpServletRequest} marshals form data for obj
      *                construction and validation
+     * @param file    {MultipartFile} an image upload
      * @return {String} reload admin subdomain
      */
     @PostMapping("/addUser")
     public String addUser(HttpServletRequest request, @RequestParam("file") MultipartFile file) {
         String filePath = iDao.saveImage(file, Long.toString(LocalDateTime.now().toEpochSecond(ZoneOffset.UTC)), userUploadDir);
-        
+
         User user = new User();
         String usernameString = request.getParameter("username");
         String passwordString = request.getParameter("password");
@@ -93,8 +95,97 @@ public class AdminController {
 
         return "redirect:/admin";
     }
-    
-    //TODO edit user with the edit user template
+
+    /*EDIT USER*/
+    /**
+     * GET - Load up the edit page with info from user in db
+     *
+     * @param model   {Model} holds user obj and lists and errors for edit
+     * @param request {HttpServletRequest} pulls in id
+     * @param error   {Integer} errors coming in from a page reload
+     * @return {String} load edit page
+     */
+    @GetMapping("/editUser")
+    public String editUserDisplay(Model model, HttpServletRequest request, Integer error) {
+        User user = uDao.readUserById(Integer.parseInt(request.getParameter("id")));
+        List<Role> roles = rDao.readAllRoles();
+
+        model.addAttribute("user", user);
+        model.addAttribute("roles", roles);
+
+        if (error != null) {
+            if (error == 1) {
+                model.addAttribute("error", "Passwords did not match, password was not updated");
+            }
+        }
+
+        return "editUser";
+    }
+
+    /**
+     * POST - attempt to edit a user, sans password change
+     *
+     * @param request {HttpServletRequest} pull in form data for edit
+     * @param file    {MultipartFile} pulls in image for profile picture
+     * @param model   {Model} holds user obj's and role list
+     * @return {String} redirect to admin page if edited, reload editUser page
+     *         if error
+     */
+    @PostMapping(value = "/editUser")
+    public String editUserAction(HttpServletRequest request, @RequestParam MultipartFile file,
+            Model model) {
+        User user = uDao.readUserById(Integer.parseInt(request.getParameter("id")));
+
+        user.setUsername(request.getParameter("username"));
+        //seperate method for password
+        user.setEnabled(Boolean.parseBoolean(request.getParameter("enabled")));
+        user.setFirstName(request.getParameter("firstName"));
+        user.setLastName(request.getParameter("lastName"));
+        user.setEmail(request.getParameter("lastName"));
+        user.setPhotoFilename(iDao.updateImage(file, user.getPhotoFilename(), userUploadDir));
+
+        Set<Role> roles = new HashSet<>();
+        roles.add(rDao.readRoleById(Integer.parseInt(request.getParameter("roleId"))));
+        user.setRoles(roles);
+
+        Validator validate = Validation.buildDefaultValidatorFactory().getValidator();
+        violations = validate.validate(user);
+
+        if (violations.isEmpty()) {
+            uDao.updateUser(user);
+        } else {
+            model.addAttribute("user", user);
+            model.addAttribute("roles", rDao.readAllRoles());
+
+            return "editUser"; //reload w errors
+        }
+
+        return "redirect:/admin";
+    }
+
+    /**
+     * POST - attempt to edit a user's password
+     *
+     * @param request {HttpServletRequest} pulls in form data for edit
+     * @return {String} redirect to admin page if updated, reload with errors if
+     *         fail
+     */
+    @PostMapping("editPassword")
+    public String editPassword(HttpServletRequest request) {
+        int id = Integer.parseInt(request.getParameter("id"));
+        User user = uDao.readUserById(id);
+        String password = request.getParameter("password");
+        String confirmPassword = request.getParameter("confirmPassword");
+
+        if (password.equals(confirmPassword)) {
+            user.setPassword(encoder.encode(password));
+            uDao.updateUser(user);
+
+            return "redirect:/admin";
+        } else {
+            return "redirect:/editUser?id=" + id + "&error=1";
+        }
+    }
 
     /*DELETE*/
     /**
