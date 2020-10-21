@@ -94,6 +94,7 @@ public class UserDaoTest {
         u1.setFirstName("First");
         u1.setLastName("Tester");
         u1.setEmail("test1@mail.com");
+        u1.setPhotoFilename(null);
         Set<Role> u1r = new HashSet<>();
         u1r.add(role1);
         u1.setRoles(u1r);
@@ -106,6 +107,7 @@ public class UserDaoTest {
         u2disabled.setFirstName("Second");
         u2disabled.setLastName(null);
         u2disabled.setEmail(null);
+        u2disabled.setPhotoFilename(null);
         Set<Role> u2disabledr = new HashSet<>();
         u2disabledr.add(role1);
         u2disabled.setRoles(u2disabledr);
@@ -118,6 +120,7 @@ public class UserDaoTest {
         cc.setFirstName("First");
         cc.setLastName("Creator");
         cc.setEmail("test3@mail.com");
+        cc.setPhotoFilename(null);
         Set<Role> ccr = new HashSet<>();
         ccr.add(role1);
         ccr.add(role2);
@@ -131,6 +134,7 @@ public class UserDaoTest {
         adm.setFirstName("The");
         adm.setLastName("Admin");
         adm.setEmail("admin@mail.com");
+        adm.setPhotoFilename(null);
         Set<Role> ar = new HashSet<>();
         ar.add(role1);
         ar.add(role2);

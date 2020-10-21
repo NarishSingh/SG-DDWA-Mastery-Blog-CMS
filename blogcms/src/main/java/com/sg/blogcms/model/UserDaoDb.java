@@ -25,15 +25,16 @@ public class UserDaoDb implements UserDao {
     @Transactional
     public User createUser(User user) {
         //insert to user
-        String insertUserQuery = "INSERT INTO user(username, password, isEnabled, firstName, lastName, email) "
-                + "VALUES(?,?,?,?,?,?);";
+        String insertUserQuery = "INSERT INTO user(username, password, isEnabled, firstName, lastName, email, photoFilename) "
+                + "VALUES(?,?,?,?,?,?,?);";
         jdbc.update(insertUserQuery,
                 user.getUsername(),
                 user.getPassword(),
                 user.isEnabled(),
                 user.getFirstName(),
                 user.getLastName(),
-                user.getEmail());
+                user.getEmail(),
+                user.getPhotoFilename());
 
         int newId = jdbc.queryForObject("SELECT LAST_INSERT_ID()", Integer.class);
         user.setId(newId);
@@ -124,7 +125,8 @@ public class UserDaoDb implements UserDao {
                 + "isEnabled = ?, "
                 + "firstName = ?, "
                 + "lastName = ?, "
-                + "email = ? "
+                + "email = ?, "
+                + "photoFilename = ? "
                 + "WHERE userId = ?;";
         int updated = jdbc.update(updateQuery,
                 user.getUsername(),
@@ -133,6 +135,7 @@ public class UserDaoDb implements UserDao {
                 user.getFirstName(),
                 user.getLastName(),
                 user.getEmail(),
+                user.getPhotoFilename(),
                 user.getId());
 
         if (updated == 1) {
@@ -217,6 +220,7 @@ public class UserDaoDb implements UserDao {
             u.setFirstName(rs.getString("firstName"));
             u.setLastName(rs.getString("lastName"));
             u.setEmail(rs.getString("email"));
+            u.setPhotoFilename(rs.getString("photoFilename"));
             //roles will be associated in implentations
 
             return u;
