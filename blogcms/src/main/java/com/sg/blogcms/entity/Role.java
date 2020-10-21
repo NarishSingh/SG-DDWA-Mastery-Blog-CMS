@@ -1,10 +1,15 @@
 package com.sg.blogcms.entity;
 
 import java.util.Objects;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 public class Role {
 
     private int id;
+
+    @NotBlank(message = "Role title cannot be blank")
+    @Size(max = 30, message = "Max of 30 characters for role title")
     private String role;
 
     /*gs*/

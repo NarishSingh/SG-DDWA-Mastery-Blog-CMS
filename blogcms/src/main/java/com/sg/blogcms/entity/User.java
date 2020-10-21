@@ -2,16 +2,34 @@ package com.sg.blogcms.entity;
 
 import java.util.Objects;
 import java.util.Set;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 public class User {
 
     private int id;
+
+    @NotBlank(message = "Username cannot be blank")
+    @Size(max = 30, message = "Max of 30 characters for username")
     private String username;
+
+    @NotBlank(message = "Password cannot be blank")
+    @Size(max = 50, message = "Password must be less than 50 characters in length")
     private String password;
+
+    @NotNull(message = "Please indicate account status")
     private boolean enabled;
+
+    @Size(max = 50, message = "First name must be less than 50 characters in length")
     private String firstName;
+
+    @Size(max = 50, message = "Last name must be less than 50 characters in length")
     private String lastName;
+
+    @Size(max = 50, message = "Email must be well formed, and less than 50 characters in length")
     private String email;
+
     private Set<Role> roles;
 
     /*gs*/

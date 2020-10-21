@@ -3,18 +3,39 @@ package com.sg.blogcms.entity;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 public class Post {
 
     private int id;
+
+    @NotBlank(message = "Post must have a title")
+    @Size(max = 50, message = "Post title must 50 characters or less")
     private String title;
+
+    @NotBlank(message = "Please enter your blog post")
     private String body;
+
+    @NotNull(message = "Please indicate approval status")
     private boolean approved;
+
+    @NotNull(message = "Please indicate if post is a static page or not")
     private boolean staticPage;
+
+    @NotNull(message = "Please indicate time of post creation")
     private LocalDateTime createdOn;
+
+    @NotNull(message = "Please indicate date and time to post")
     private LocalDateTime postOn;
+
+    @NotNull(message = "Please indicate time of post expiration")
     private LocalDateTime expireOn;
+
+    @NotNull(message = "Please indicate the user who authored post")
     private User user;
+
     private List<Category> categories;
 
     /*gs*/

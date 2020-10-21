@@ -1,10 +1,15 @@
 package com.sg.blogcms.entity;
 
 import java.util.Objects;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 public class Category {
 
     private int id;
+
+    @NotBlank(message = "Category/hashtag cannot be blank")
+    @Size(max = 30, message = "Max of 30 characters for category/hashtag")
     private String category;
 
     /*gs*/
@@ -58,5 +63,5 @@ public class Category {
     public String toString() {
         return "Category{" + "id=" + id + ", category=" + category + '}';
     }
-    
+
 }
