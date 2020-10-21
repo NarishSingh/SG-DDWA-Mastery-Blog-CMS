@@ -28,6 +28,7 @@ public class AdminController {
     PasswordEncoder encoder;
     Set<ConstraintViolation<User>> violations = new HashSet<>();
 
+    /*MAIN*/
     /**
      * GET - load subdomain with all users
      *
@@ -43,8 +44,9 @@ public class AdminController {
         return "admin";
     }
 
+    /*CREATE*/
     /**
-     * POST create a new user account from form data
+     * POST - create a new user account from form data
      *
      * @param request {HttpServletRequest} marshals form data for obj
      *                construction and validation
@@ -77,6 +79,23 @@ public class AdminController {
         if (violations.isEmpty()) {
             uDao.createUser(user);
         }
+
+        return "redirect:/admin";
+    }
+    
+    //TODO edit user with the edit user template
+
+    /*DELETE*/
+    /**
+     * POST - delete a user account
+     *
+     * @param request {HttpServletRequest} will retrieve id from data table
+     * @return {String} reload the admin page
+     */
+    @PostMapping("/deleteUser")
+    public String deleteUser(HttpServletRequest request) {
+        int id = Integer.parseInt(request.getParameter("id"));
+        uDao.deleteUserById(id);
 
         return "redirect:/admin";
     }
