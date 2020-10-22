@@ -10,8 +10,8 @@ CREATE TABLE `role` (
 
 CREATE TABLE `user` (
     userId INT PRIMARY KEY AUTO_INCREMENT,
-    username VARCHAR(30) NOT NULL,
-    password VARCHAR(50) NOT NULL,
+    username VARCHAR(50) NOT NULL,
+    password VARCHAR(100) NOT NULL,
     isEnabled BIT NOT NULL DEFAULT 0,
     firstName VARCHAR(50),
     lastName VARCHAR(50),
@@ -32,7 +32,7 @@ CREATE TABLE userRole (
 
 CREATE TABLE post (
     postId INT PRIMARY KEY AUTO_INCREMENT,
-    title VARCHAR(50) NOT NULL,
+    title VARCHAR(100) NOT NULL,
     body TEXT NOT NULL,
     isApproved BIT NOT NULL DEFAULT 0,
     isStaticPage BIT NOT NULL DEFAULT 0,
@@ -47,7 +47,7 @@ CREATE TABLE post (
 
 CREATE TABLE category (
     categoryId INT PRIMARY KEY AUTO_INCREMENT,
-    category VARCHAR(30) NOT NULL
+    category VARCHAR(50) NOT NULL
 );
 
 -- bridge table

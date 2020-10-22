@@ -156,6 +156,7 @@ public class AdminController {
         } else {
             model.addAttribute("user", user);
             model.addAttribute("roles", rDao.readAllRoles());
+            model.addAttribute("errors", violations);
 
             return "editUser"; //reload w errors
         }
