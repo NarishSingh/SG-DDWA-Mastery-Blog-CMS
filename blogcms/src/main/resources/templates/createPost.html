@@ -24,7 +24,7 @@
             <!--navbar-->
             <nav class="nav nav-masthead justify-content-center">
                 <!--FIXME add href links-->
-                <a class="nav-link active" href="#">Home</a>
+                <a class="nav-link active" href="home">Home</a>
                 <a class="nav-link" href="#">Blog</a>
                 <a class="nav-link" href="createPost" sec:authorize="hasAnyRole('ROLE_CREATOR','ROLE_ADMIN')">Create</a>
                 <!--admin, creator only-->
@@ -35,20 +35,19 @@
     </header>
 
     <!--Create form-->
-    <form action="createPost" method="post" enctype="multipart/form-data">
+    <form action="addPost" method="post" enctype="multipart/form-data">
         <!--Title-->
-        <div class="input-group input-group-lg">
+        <div class="form-control input-group input-group-lg">
             <div class="input-group-prepend">
                 <span class="input-group-text" id="post-title">Title</span>
             </div>
             <input type="text" name="title" id="title" class="form-control" aria-label="Title input bar"
                    aria-describedby="post-title">
         </div>
-        
+
         <!--Editor-->
-        <!--FIXME does this need class form-control?-->
         <label for="post-editor"></label>
-        <textarea name="post-editor" id="post-editor" cols="30" rows="20">
+        <textarea class="form-control" name="body" id="post-editor" cols="30" rows="20">
             Welcome to Idealism
         </textarea>
 
@@ -61,20 +60,37 @@
         <!--createdOn will be logged by controller on POST-->
 
         <!--Post on-->
-        <label for="postOn">Post Date:</label>
-        <input type="datetime-local" class="form-control" name="postOn" id="postOn">
+        <div class="form-group">
+            <label for="postOn">Post Date:</label>
+            <input type="datetime-local" class="form-control" name="postOn" id="postOn">
+        </div>
 
         <!--Expire on-->
-        <label for="expireOnDate">Expire Date:</label>
-        <input type="datetime-local" class="form-control" name="expireOnDate" id="expireOnDate">
+        <div class="form-group">
+            <label for="expireOn">Expire Date:</label>
+            <input type="datetime-local" class="form-control" name="expireOn" id="expireOn">
+        </div>
 
-        <!--FIXME how to grab user id?-->
+        <!--FIXME how to grab user id? use authentication?-->
 
         <!--Category select-->
-
+        <div class="form-group">
+            <label for="category">Category:</label>
+            <select multiple class="form-control" name="categoryId" id="category" >
+                <option th:each="cat : ${categories}" th:value="${cat.id}" th:text="${cat.category}">
+                    category
+                </option>
+            </select>
+        </div>
     </form>
 
     <!--Add new Category Form-->
+    <!--TODO consider moving to another template-->
+    <form class="form-inline" action="addCategory" method="post">
+        <label for="newCategory"></label>
+        <input type="text" class="form-control" name="newCategory" id="newCategory" placeholder="New Category">
+        <button type="submit" class="btn btn-outline-dark">Create Category</button>
+    </form>
 </div>
 
 <!--CDN's-->
