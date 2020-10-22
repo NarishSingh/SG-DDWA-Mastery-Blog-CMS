@@ -3,6 +3,7 @@ package com.sg.blogcms.entity;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
+import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -15,6 +16,7 @@ public class Post {
     @Size(max = 50, message = "Post title must 50 characters or less")
     private String title;
 
+    @Size(max = 65535, message = "Post body cannot exceed 65,535")
     @NotBlank(message = "Please enter your blog post")
     private String body;
 
@@ -27,9 +29,11 @@ public class Post {
     @NotNull(message = "Please indicate time of post creation")
     private LocalDateTime createdOn;
 
+    @FutureOrPresent(message = "Cannot post in the past")
     @NotNull(message = "Please indicate date and time to post")
     private LocalDateTime postOn;
 
+    @FutureOrPresent(message = "Cannot post when its already expired")
     @NotNull(message = "Please indicate time of post expiration")
     private LocalDateTime expireOn;
 

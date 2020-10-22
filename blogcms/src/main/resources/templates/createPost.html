@@ -13,7 +13,7 @@
           integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
     <script src="https://cdn.tiny.cloud/1/qyxh32s0gnm9a2quutddxso16r7h97lvfr8j1m4bepz0090x/tinymce/5/tinymce.min.js"
             referrerpolicy="origin"></script> <!--Tiny MCE-->
-    <link rel="stylesheet" href="../static/styles/home.css">
+    <link rel="stylesheet" href="styles/home.css">
 </head>
 <body>
 <div class="d-flex w-100 h-100 p-3 mx-auto flex-column">
@@ -24,11 +24,12 @@
             <!--navbar-->
             <nav class="nav nav-masthead justify-content-center">
                 <!--FIXME add href links-->
-                <a class="nav-link" href="home">Home</a>
+                <a class="nav-link active" href="#">Home</a>
                 <a class="nav-link" href="#">Blog</a>
-                <a class="nav-link active" href="create" sec:authorize="hasRole('ROLE_CREATOR')">Create</a> <!--creator only-->
-                <a class="nav-link" href="admin" sec:authorize="hasRole('ROLE_Admin')">Manage</a> <!--admin only-->
-                <a class="nav-link" href="login">Sign In</a>
+                <a class="nav-link" href="createPost" sec:authorize="hasAnyRole('ROLE_CREATOR','ROLE_ADMIN')">Create</a>
+                <!--admin, creator only-->
+                <a class="nav-link" href="admin" sec:authorize="hasRole('ROLE_ADMIN')">Manage</a> <!--admin only-->
+                <a class="nav-link" href="login" sec:authorize="!isAuthenticated()">Sign In</a>
             </nav>
         </div>
     </header>
@@ -69,8 +70,11 @@
 
         <!--FIXME how to grab user id?-->
 
-        <!--FIXME how to do category select?-->
+        <!--Category select-->
+
     </form>
+
+    <!--Add new Category Form-->
 </div>
 
 <!--CDN's-->
