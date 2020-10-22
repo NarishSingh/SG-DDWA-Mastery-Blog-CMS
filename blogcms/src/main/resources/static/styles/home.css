@@ -96,3 +96,9 @@ body {
 .mastfoot {
     color: rgba(255, 255, 255, .5);
 }
+
+/*createPost.html*/
+.input-group-text{
+    background-color: #333;
+    color: white;
+}

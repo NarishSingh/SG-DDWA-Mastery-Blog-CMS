@@ -22,9 +22,10 @@
             <!--navbar-->
             <nav class="nav nav-masthead justify-content-center">
                 <!--FIXME add href links-->
-                <a class="nav-link" href="#">Home</a>
+                <a class="nav-link" href="home">Home</a>
                 <a class="nav-link" href="#">Blog</a>
-                <a class="nav-link" href="#">Browse</a>
+                <a class="nav-link" href="create" sec:authorize="hasRole('ROLE_CREATOR')">Create</a> <!--creator only-->
+                <a class="nav-link" href="admin" sec:authorize="hasRole('ROLE_Admin')">Manage</a> <!--admin only-->
                 <a class="nav-link active" href="login">Sign In</a>
             </nav>
         </div>
