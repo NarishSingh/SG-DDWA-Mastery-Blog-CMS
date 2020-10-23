@@ -34,9 +34,13 @@
     </header>
 
     <!--Create form-->
+    <!--Error box-->
+    <div class="d-flex text-center" th:if="${!errors.isEmpty()}">
+        <p class="alert alert-danger" th:each="error : ${errors}" th:text="${error.message}">Error message</p>
+    </div>
     <form action="addPost" method="post" enctype="multipart/form-data">
         <!--Title-->
-        <div class="form-control input-group input-group-lg">
+        <div class="input-group input-group-lg">
             <div class="input-group-prepend">
                 <span class="input-group-text" id="post-title">Title</span>
             </div>
@@ -49,39 +53,48 @@
         <textarea class="form-control" name="body" id="post-editor" cols="30" rows="20">
             Welcome to Idealism
         </textarea>
+        <br>
 
         <!--Cover photo-->
-        <div class="form-group">
-            <label for="file" class="col-form-label">Cover Photo:</label>
-            <input type="file" class="form-control-file" name="file" id="file">
+        <!--image upload-->
+        <div class="form-group custom-file">
+            <input type="file" class="custom-file-input" name="file" id="file">
+            <label for="file" class="custom-file-label">Upload Cover Photo...</label>
         </div>
+        <br><br>
 
         <!--createdOn will be logged by controller on POST-->
 
         <!--Post on-->
-        <div class="form-group">
-            <label for="postOn">Post Date:</label>
-            <input type="datetime-local" class="form-control" name="postOn" id="postOn">
+        <div class="form-group row">
+            <label for="postOn" class="col-form-label col-lg-3 col-sm-12">Post Date/Time:</label>
+            <div class="col-lg-9 col-sm-12">
+                <input type="datetime-local" class="form-control" name="postOn" id="postOn">
+            </div>
         </div>
+        <br>
 
         <!--Expire on-->
-        <div class="form-group">
-            <label for="expireOn">Expire Date:</label>
-            <input type="datetime-local" class="form-control" name="expireOn" id="expireOn">
+        <div class="form-group row">
+            <label for="expireOn" class="col-form-label col-lg-3 col-sm-12">Expire Date/Time:</label>
+            <div class="col-lg-9 col-sm-12">
+                <input type="datetime-local" class="form-control" name="expireOn" id="expireOn">
+            </div>
         </div>
 
         <!--FIXME how to grab user id? use authentication?-->
 
         <!--Category select-->
-        <div class="form-group">
-            <label for="category">Category:</label>
-            <select multiple class="form-control" name="categoryId" id="category">
-                <option th:each="cat : ${categories}" th:value="${cat.id}" th:text="${cat.category}">
-                    category
-                </option>
-            </select>
-
-            <a href="createCategory">Create New Category</a>
+        <div class="form-group row">
+            <label for="category" class="col-lg-3 col-sm-12">Category:</label>
+            <div class="col-lg-9 col-sm-12">
+                <select multiple class="form-control" name="categoryId" id="category">
+                    <option th:each="cat : ${categories}" th:value="${cat.id}" th:text="${cat.category}">
+                        category
+                    </option>
+                </select>
+            </div>
+            <a href="createCategory" id="create-category-link">Create New Category</a>
         </div>
 
         <button type="submit" class="btn btn-outline-light">Create Post</button>
