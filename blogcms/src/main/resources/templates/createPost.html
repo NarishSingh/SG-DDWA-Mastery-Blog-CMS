@@ -39,6 +39,8 @@
         <p class="alert alert-danger" th:each="error : ${errors}" th:text="${error.message}">Error message</p>
     </div>
     <form action="addPost" method="post" enctype="multipart/form-data">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
         <!--Title-->
         <div class="input-group input-group-lg">
             <div class="input-group-prepend">
@@ -63,7 +65,11 @@
         </div>
         <br><br>
 
-        <!--createdOn will be logged by controller on POST-->
+        <!--static page checkbox-->
+        <div class="form-group row">
+            <label for="staticPage">Static Page</label>
+            <input type="checkbox" name="staticPage" id="staticPage">
+        </div>
 
         <!--Post on-->
         <div class="form-group row">

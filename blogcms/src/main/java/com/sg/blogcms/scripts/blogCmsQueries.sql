@@ -28,7 +28,7 @@ WHERE userId = 1;
 SELECT * FROM blogCms.`user`;
 SELECT * FROM `role`;
 SELECT * FROM userRole;
-SELECT * FROM post;
-SELECT * FROM post
+SELECT * FROM blogCms.post;
+SELECT * FROM blogCms.post
     WHERE postId = 1;
 

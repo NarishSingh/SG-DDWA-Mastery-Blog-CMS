@@ -140,7 +140,6 @@ public class AdminController {
 
         user.setUsername(request.getParameter("username"));
         //seperate method for password
-//        user.setEnabled(Boolean.parseBoolean(request.getParameter("enabled")));
         if (enabled != null) {
             user.setEnabled(true);
         } else {

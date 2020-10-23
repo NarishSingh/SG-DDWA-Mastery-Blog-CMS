@@ -2,6 +2,7 @@ package com.sg.blogcms.controllers;
 
 import com.sg.blogcms.entity.Category;
 import com.sg.blogcms.entity.Post;
+import com.sg.blogcms.entity.User;
 import com.sg.blogcms.model.CategoryDao;
 import com.sg.blogcms.model.ImageDao;
 import com.sg.blogcms.model.PostDao;
@@ -18,6 +19,7 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -72,53 +74,74 @@ public class PostController {
     /**
      * POST - create a new blog post
      *
-     * @param request  {HttpServletRequest} pull in form data
-     * @param file     {MultipartFile} pull in cover photo
-     * @param postOn   {LocalDateTime} data from form for when to post blog
-     * @param expireOn {LocalDateTime} data from form for when to remove blog
-     * @param model    {Model} hold lists and errors on fail to post
+     * @param request    {HttpServletRequest} pull in form data
+     * @param file       {MultipartFile} pull in cover photo
+     * @param staticPage {Boolean} param from checkbox indicating if page is
+     *                   static or not
+     * @param auth       {Authentication} to access authenticated user
+     * @param postOn     {LocalDateTime} data from form for when to post blog
+     * @param expireOn   {LocalDateTime} data from form for when to remove blog
+     * @param model      {Model} hold lists and errors on fail to post
      * @return {String} redirect to blog scroll, reload page w errors if fail
      */
-    @PostMapping("addPost")
+    @PostMapping("/addPost")
     public String addPost(HttpServletRequest request, @RequestParam("file") MultipartFile file,
+            Boolean staticPage, Authentication auth,
             @RequestParam("postOn") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime postOn,
             @RequestParam("expireOn") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime expireOn,
             Model model) {
-        String filePath = iDao.saveImage(file, Long.toString(LocalDateTime.now().toEpochSecond(ZoneOffset.UTC)), coverUploadDir);
-
         Post post = new Post();
         post.setTitle(request.getParameter("title"));
         post.setBody(request.getParameter("body"));
         post.setApproved(false); //admin must approve
-        //FIXME static page?
-//        post.setStaticPage(Boolean.parseBoolean(request.getParameter("")));
+
+        //static page status from check box
+        if (staticPage != null) {
+            post.setStaticPage(true);
+        } else {
+            post.setStaticPage(false);
+        }
+
+        //datetime setting
         post.setCreatedOn(LocalDateTime.now().withNano(0));
         post.setPostOn(postOn);
         post.setExpireOn(expireOn);
-        //FIXME figure out how to grab the user
-//        post.setUser(uDao.readUserById());
+
+        //pull name from Spring security authentication then read in User obj
+        User author = uDao.readUserByUsername(auth.getName());
+        post.setUser(author);
+
+        String filePath = iDao.saveImage(file, Long.toString(LocalDateTime.now().toEpochSecond(ZoneOffset.UTC)), coverUploadDir);
         post.setPhotoFilename(filePath);
 
+        //set categories from multi select
         List<Category> categories = new ArrayList<>();
         String[] categoryIds = request.getParameterValues("categoryId");
-        for (String id : categoryIds) {
-            categories.add(cDao.readCategoryById(Integer.parseInt(id)));
+        if (categoryIds != null) {
+            for (String id : categoryIds) {
+                categories.add(cDao.readCategoryById(Integer.parseInt(id)));
+            }
+            post.setCategories(categories);
         }
-        post.setCategories(categories);
+        
 
         Validator validate = Validation.buildDefaultValidatorFactory().getValidator();
         violations = validate.validate(post);
 
         if (violations.isEmpty()) {
             pDao.createPost(post);
-        } else {
+        }
+        /*
+        else {
             model.addAttribute("categories", cDao.readAllCategories());
             model.addAttribute("errors", violations);
 
             return "createPost";
         }
+         */
 
         return "redirect:/createPost"; //TODO should load blog scroll, change later
+//        return "redirect:/browse";
     }
 
     /**
@@ -146,5 +169,5 @@ public class PostController {
     }
 
     /*EDIT - ADMIN ONLY*/
-    /*DELETE - ADMIN ONLY*/
+ /*DELETE - ADMIN ONLY*/
 }
