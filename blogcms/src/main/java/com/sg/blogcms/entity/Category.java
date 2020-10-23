@@ -9,7 +9,7 @@ public class Category {
     private int id;
 
     @NotBlank(message = "Category/hashtag cannot be blank")
-    @Size(max = 30, message = "Max of 30 characters for category/hashtag")
+    @Size(max = 50, message = "Max of 50 characters for category/hashtag")
     private String category;
 
     /*gs*/

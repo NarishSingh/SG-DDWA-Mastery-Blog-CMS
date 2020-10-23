@@ -11,11 +11,11 @@ public class User {
     private int id;
 
     @NotBlank(message = "Username cannot be blank")
-    @Size(max = 30, message = "Max of 30 characters for username")
+    @Size(max = 50, message = "Max of 30 characters for username")
     private String username;
 
     @NotBlank(message = "Password cannot be blank")
-    @Size(max = 50, message = "Password must be less than 50 characters in length")
+    @Size(max = 100, message = "Password must be less than 50 characters in length")
     private String password;
 
     @NotNull(message = "Please indicate account status")
@@ -30,6 +30,7 @@ public class User {
     @Size(max = 50, message = "Email must be well formed, and less than 50 characters in length")
     private String email;
 
+    @Size(max = 255)
     private String photoFilename;
     
     private Set<Role> roles;

@@ -25,7 +25,7 @@ UPDATE `user` SET
     password = "$2a$10$OVxfKgo/KlnxfuZvTqhs8ejKFrQs9.0URnoNSLlW7fiSR/OCvmNry"
 WHERE userId = 1;
 
-SELECT * FROM `user`;
+SELECT * FROM blogCms.`user`;
 SELECT * FROM `role`;
 SELECT * FROM userRole;
 SELECT * FROM post;

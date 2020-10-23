@@ -79,7 +79,7 @@ public class AdminController {
             user.setFirstName(request.getParameter("firstName"));
             user.setLastName(request.getParameter("lastName"));
             user.setEmail(request.getParameter("email"));
-            user.setPassword(filePath);
+            user.setPhotoFilename(filePath);
 
             Set<Role> userRoles = new HashSet<>();
             userRoles.add(rDao.readRoleById(Integer.parseInt(request.getParameter("roleId"))));

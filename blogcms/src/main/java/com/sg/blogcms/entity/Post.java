@@ -13,7 +13,7 @@ public class Post {
     private int id;
 
     @NotBlank(message = "Post must have a title")
-    @Size(max = 50, message = "Post title must 50 characters or less")
+    @Size(max = 100, message = "Post title must 100 characters or less")
     private String title;
 
     @Size(max = 65535, message = "Post body cannot exceed 65,535")
