@@ -21,7 +21,6 @@
     <header class="masthead mb-auto">
         <div class="inner">
             <h3 class="masthead-brand">Idealism</h3>
-            <!--navbar-->
             <nav class="nav nav-masthead justify-content-center">
                 <!--FIXME add href links-->
                 <a class="nav-link active" href="home">Home</a>
@@ -76,7 +75,7 @@
         <!--Category select-->
         <div class="form-group">
             <label for="category">Category:</label>
-            <select multiple class="form-control" name="categoryId" id="category" >
+            <select multiple class="form-control" name="categoryId" id="category">
                 <option th:each="cat : ${categories}" th:value="${cat.id}" th:text="${cat.category}">
                     category
                 </option>

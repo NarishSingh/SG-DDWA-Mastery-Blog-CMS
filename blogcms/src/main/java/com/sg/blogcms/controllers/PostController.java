@@ -39,7 +39,13 @@ public class PostController {
     private final String coverUploadDir = "Posts";
     Set<ConstraintViolation<Post>> violations = new HashSet<>();
 
-    /*MAIN*/
+    /*MAIN - ADMIN/CREATOR*/
+    /**
+     * GET - load the creation main page
+     *
+     * @param model {Model} load related lists and errors
+     * @return {String} load page
+     */
     @GetMapping("/createPost")
     public String displayCreatePage(Model model) {
         model.addAttribute("categories", cDao.readAllCategories());
@@ -48,7 +54,17 @@ public class PostController {
         return "createPost";
     }
 
-    /*CREATE*/
+    /*CREATE - ADMIN/CREATOR*/
+    /**
+     * POST - create a new blog post
+     *
+     * @param request  {HttpServletRequest} pull in form data
+     * @param file     {MultipartFile} pull in cover photo
+     * @param postOn   {LocalDateTime} data from form for when to post blog
+     * @param expireOn {LocalDateTime} data from form for when to remove blog
+     * @param model    {Model} hold lists and errors on fail to post
+     * @return {String} redirect to blog scroll, reload page w errors if fail
+     */
     @PostMapping("addPost")
     public String addPost(HttpServletRequest request, @RequestParam("file") MultipartFile file,
             @RequestParam("postOn") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime postOn,
@@ -88,10 +104,17 @@ public class PostController {
             return "createPost";
         }
 
-        return "redirect:/createPost";
-
+        return "redirect:/createPost"; //TODO should load blog scroll, change later
     }
 
+    /**
+     * Create a new category to hashtag a post
+     *
+     * @param request {HttpServletRequest} pulls in form data
+     * @param model   {Model} holds errors if category is invalid
+     * @return {String} redirect to post creation page if created, reload page
+     *         with errors if fail
+     */
     @PostMapping("createCategory")
     public String addCategory(HttpServletRequest request, Model model) {
         Category c = new Category();
@@ -109,6 +132,6 @@ public class PostController {
         return "redirect:/createPost";
     }
 
-    /*EDIT*/
-    /*DELETE*/
+    /*EDIT - ADMIN ONLY*/
+    /*DELETE - ADMIN ONLY*/
 }
