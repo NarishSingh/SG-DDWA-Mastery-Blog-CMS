@@ -41,10 +41,10 @@ public class PostController {
 
     /*MAIN - ADMIN/CREATOR*/
     /**
-     * GET - load the creation main page
+     * GET - load the post creation main page
      *
      * @param model {Model} load related lists and errors
-     * @return {String} load page
+     * @return {String} load create post page
      */
     @GetMapping("/createPost")
     public String displayCreatePage(Model model) {
@@ -52,6 +52,20 @@ public class PostController {
         model.addAttribute("errors", violations);
 
         return "createPost";
+    }
+
+    /**
+     * GET - load the category creation main page
+     *
+     * @param model {Model} load related lists and errors
+     * @return {String} load create category page
+     */
+    @GetMapping("/createCategory")
+    public String displayCreateCategoryPage(Model model) {
+        model.addAttribute("categories", cDao.readAllCategories());
+        model.addAttribute("errors", violations);
+
+        return "createCategory";
     }
 
     /*CREATE - ADMIN/CREATOR*/
@@ -122,7 +136,6 @@ public class PostController {
 
         if (!categoryString.isBlank()) {
             c.setCategory(categoryString);
-
             cDao.createCategory(c);
         } else {
             model.addAttribute("errors", violations);
