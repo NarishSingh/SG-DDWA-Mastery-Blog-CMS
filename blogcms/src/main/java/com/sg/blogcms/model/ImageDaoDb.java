@@ -14,7 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Repository
 public class ImageDaoDb implements ImageDao {
 
-    private final String RESOURCE_ROOT = "C:/Users/naris/Documents/Work/TECHHIRE/REPOSITORY/SG-DDWA-Mastery-Blog-CMS/blogcms/src/main/resources/static";
+    private final String RESOURCE_ROOT = "C:/Users/naris/Documents/Work/TECHHIRE/REPOSITORY/SG-DDWA-Mastery-Blog-CMS/blogcms/src/main/resources/static/";
     private final String UPLOAD_DIR = "images/uploads/";
 
     @Override

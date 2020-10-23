@@ -112,10 +112,11 @@ public class AdminController {
 
         model.addAttribute("user", user);
         model.addAttribute("roles", roles);
+        model.addAttribute("errors", violations);
 
         if (error != null) {
             if (error == 1) {
-                model.addAttribute("error", "Passwords did not match, password was not updated");
+                model.addAttribute("passwordError", "Passwords did not match, password was not updated");
             }
         }
 
@@ -127,18 +128,24 @@ public class AdminController {
      *
      * @param request {HttpServletRequest} pull in form data for edit
      * @param file    {MultipartFile} pulls in image for profile picture
+     * @param enabled {Boolean} param to set if an account is enabled/disabled
      * @param model   {Model} holds user obj's and role list
      * @return {String} redirect to admin page if edited, reload editUser page
      *         if error
      */
     @PostMapping(value = "/editUser")
     public String editUserAction(HttpServletRequest request, @RequestParam MultipartFile file,
-            Model model) {
+            Boolean enabled, Model model) {
         User user = uDao.readUserById(Integer.parseInt(request.getParameter("id")));
 
         user.setUsername(request.getParameter("username"));
         //seperate method for password
-        user.setEnabled(Boolean.parseBoolean(request.getParameter("enabled")));
+//        user.setEnabled(Boolean.parseBoolean(request.getParameter("enabled")));
+        if (enabled != null) {
+            user.setEnabled(true);
+        } else {
+            user.setEnabled(false);
+        }
         user.setFirstName(request.getParameter("firstName"));
         user.setLastName(request.getParameter("lastName"));
         user.setEmail(request.getParameter("lastName"));
@@ -178,7 +185,8 @@ public class AdminController {
         String password = request.getParameter("password");
         String confirmPassword = request.getParameter("confirmPassword");
 
-        if (password.equals(confirmPassword)) {
+        if (!password.isBlank() && !confirmPassword.isBlank()
+                && password.equals(confirmPassword)) {
             user.setPassword(encoder.encode(password));
             uDao.updateUser(user);
 
