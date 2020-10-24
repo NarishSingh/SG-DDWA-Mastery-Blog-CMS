@@ -158,7 +158,7 @@ public class PostController {
     @PostMapping("createCategory")
     public String addCategory(HttpServletRequest request, Model model) {
         Category c = new Category();
-        String categoryString = request.getParameter("category");
+        String categoryString = request.getParameter("newCategory");
 
         if (!categoryString.isBlank()) {
             c.setCategory(categoryString);

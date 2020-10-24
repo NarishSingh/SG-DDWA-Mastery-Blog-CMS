@@ -75,8 +75,8 @@
         <div class="form-group row">
             <label for="postOn" class="col-form-label col-lg-3 col-sm-12">Post Date/Time:</label>
             <div class="col-lg-9 col-sm-12">
-                <input type="datetime-local" class="form-control" name="postOn" id="postOn" th:attr="value=${now}"
-                       max="9999-12-31T00:00">
+                <input type="datetime-local" class="form-control" name="postOn" id="postOn"
+                       th:attr="min=${now},value=${now}" max="9999-12-31T00:00">
             </div>
         </div>
         <br>
@@ -85,8 +85,8 @@
         <div class="form-group row">
             <label for="expireOn" class="col-form-label col-lg-3 col-sm-12">Expire Date/Time:</label>
             <div class="col-lg-9 col-sm-12">
-                <input type="datetime-local" class="form-control" name="expireOn" id="expireOn" value="9999-12-31T00:00"
-                       max="9999-12-31T00:00">
+                <input type="datetime-local" class="form-control" name="expireOn" id="expireOn" th:attr="min=${now}"
+                       value="9999-12-31T00:00" max="9999-12-31T00:00">
             </div>
         </div>
 

@@ -147,7 +147,7 @@ public class AdminController {
         }
         user.setFirstName(request.getParameter("firstName"));
         user.setLastName(request.getParameter("lastName"));
-        user.setEmail(request.getParameter("lastName"));
+        user.setEmail(request.getParameter("email"));
         user.setPhotoFilename(iDao.updateImage(file, user.getPhotoFilename(), userUploadDir));
 
         Set<Role> roles = new HashSet<>();

@@ -31,10 +31,20 @@
     </header>
 
     <!--Add new Category Form-->
+    <h2>New Hashtag</h2>
+    <!--Error box-->
+    <div class="d-flex text-center" th:if="${!errors.isEmpty()}">
+        <p class="alert alert-danger" th:each="error : ${errors}" th:text="${error.message}">Error message</p>
+    </div>
     <form class="form-inline" action="createCategory" method="post">
-        <label for="newCategory"></label>
-        <input type="text" class="form-control" name="newCategory" id="newCategory" placeholder="New Category">
-        <button type="submit" class="btn btn-outline-dark">Create Category</button>
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+        <div class="form-group row">
+            <div class="col-lg-12 col-sm-12">
+                <input type="text" class="form-control" name="newCategory" id="newCategory" placeholder="New Category">
+                <button type="submit" class="btn btn-outline-light">Create Category</button>
+            </div>
+        </div>
     </form>
 </div>
 
