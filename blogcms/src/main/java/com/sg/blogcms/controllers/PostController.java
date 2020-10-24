@@ -50,10 +50,9 @@ public class PostController {
      */
     @GetMapping("/createPost")
     public String displayCreatePage(Model model) {
-        String now = LocalDateTime.now().withSecond(0).withNano(0).toString();
-
         model.addAttribute("categories", cDao.readAllCategories());
         model.addAttribute("errors", violations);
+        String now = LocalDateTime.now().withSecond(0).withNano(0).toString();
         model.addAttribute("now", now); //to spoof a time for postOn
 
         return "createPost";
@@ -72,16 +71,17 @@ public class PostController {
 
         return "createCategory";
     }
-    
+
     /**
      * GET - load post management main page - admin only
+     *
      * @param model {Model} holds post list
      * @return {String} load post management page
      */
     @GetMapping("/postManagement")
-    public String displayPostManagementPage(Model model){
+    public String displayPostManagementPage(Model model) {
         model.addAttribute("posts", pDao.readAllPosts());
-        
+
         return "postManagement";
     }
 
@@ -91,8 +91,8 @@ public class PostController {
      *
      * @param request    {HttpServletRequest} pull in form data
      * @param file       {MultipartFile} pull in cover photo
-     * @param staticPage {Boolean} from checkbox indicating if page is
-     *                   static or not
+     * @param staticPage {Boolean} from checkbox indicating if page is static or
+     *                   not
      * @param auth       {Authentication} to access authenticated user
      * @param postOn     {LocalDateTime} from form for when to post blog
      * @param expireOn   {LocalDateTime} from form for when to remove blog
@@ -100,11 +100,10 @@ public class PostController {
      * @return {String} redirect to blog scroll, reload page w errors if fail
      */
     @PostMapping("/addPost")
-    public String addPost(HttpServletRequest request, @RequestParam("file") MultipartFile file,
+    public String addPost(Model model, HttpServletRequest request, @RequestParam("file") MultipartFile file,
             Boolean staticPage, Authentication auth,
             @RequestParam("postOn") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime postOn,
-            @RequestParam("expireOn") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime expireOn,
-            Model model) {
+            @RequestParam("expireOn") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime expireOn) {
         Post post = new Post();
         post.setTitle(request.getParameter("title"));
         post.setBody(request.getParameter("body"));
@@ -145,14 +144,6 @@ public class PostController {
         if (violations.isEmpty()) {
             pDao.createPost(post);
         }
-        /*
-        else {
-            model.addAttribute("categories", cDao.readAllCategories());
-            model.addAttribute("errors", violations);
-
-            return "createPost";
-        }
-         */
 
         return "redirect:/createPost"; //TODO should load blog scroll, change later
 //        return "redirect:/browse";
@@ -181,16 +172,51 @@ public class PostController {
 
         return "redirect:/createPost";
     }
-    
+
     /*READ/VIEW - ADMIN AND PUBLIC*/
+    /**
+     * GET - load up a post for viewing
+     *
+     * @param model   {Model} holds post obj
+     * @param request {HttpServletRequest} used to pull the id from GET request
+     * @return {String} load viewing page for post
+     */
     @GetMapping("/viewPost")
-    public String displayViewPostPage(Model model, HttpServletRequest request){
+    public String displayViewPostPage(Model model, HttpServletRequest request) {
         Post post = pDao.readPostById(Integer.parseInt(request.getParameter("id")));
         model.addAttribute("post", post);
-        
+
         return "viewPost";
     }
-    
+
     /*EDIT - ADMIN ONLY*/
- /*DELETE - ADMIN ONLY*/
+    /**
+     * GET - load up an edit post page with the data from original post
+     *
+     * @param model   {Model} holds post obj and related data for edit
+     * @param request {HttpServletRequest} pulls in id from get request
+     * @return {String} load edit post page
+     */
+    @GetMapping("/editPost")
+    public String editPostDisplay(Model model, HttpServletRequest request) {
+        Post post = pDao.readPostById(Integer.parseInt(request.getParameter("id")));
+
+        model.addAttribute("post", post);
+        model.addAttribute("categories", cDao.readAllCategories());
+        model.addAttribute("errors", violations);
+        String now = LocalDateTime.now().withSecond(0).withNano(0).toString();
+        model.addAttribute("now", now); //to spoof a time for postOn
+
+        return "editPost";
+    }
+    
+    @PostMapping(value = "/editPost")
+    public String editPostAction(Model model, HttpServletRequest request, @RequestParam("file") MultipartFile file,
+            Boolean staticPage, Boolean approved, Authentication auth,
+            @RequestParam("postOn") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime postOn,
+            @RequestParam("expireOn") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime expireOn){
+        
+    }
+
+    /*DELETE - ADMIN ONLY*/
 }
