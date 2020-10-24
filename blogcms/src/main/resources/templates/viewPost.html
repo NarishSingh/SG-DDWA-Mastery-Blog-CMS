@@ -42,6 +42,11 @@
                 <span th:text="${#temporals.format(post.postOn, 'MM-dd-yyyy, HH:mm')}">post date</span>
             </p>
 
+            <!--FIXME center this-->
+            <div>
+                <img th:src="${post.photoFilename}" alt="cover photo">
+            </div>
+
             <div th:utext="${post.body}"></div>
         </div>
     </main>
