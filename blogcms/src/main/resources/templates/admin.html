@@ -176,6 +176,7 @@
                     <tr>
                         <th>Username</th>
                         <th>Name</th>
+                        <th>E-mail</th>
                         <th>Picture</th>
                         <th>Role</th>
                         <th>Enabled?</th>
@@ -189,6 +190,7 @@
                         <tr>
                             <td th:text="${user.username}">username</td>
                             <td th:text="${user.firstName + ' ' + user.lastName}">name</td>
+                            <td th:text="${user.email}">email</td>
                             <td><img th:src="${user.photoFilename}" style="height: 50px; padding: 0; margin: 0;"></td>
                             <td>
                                 <div th:each="currentRole : ${user.roles}">

@@ -50,8 +50,11 @@ public class PostController {
      */
     @GetMapping("/createPost")
     public String displayCreatePage(Model model) {
+        String now = LocalDateTime.now().withSecond(0).withNano(0).toString();
+        
         model.addAttribute("categories", cDao.readAllCategories());
         model.addAttribute("errors", violations);
+        model.addAttribute("now", now); //to spoof a time for postOn
 
         return "createPost";
     }
