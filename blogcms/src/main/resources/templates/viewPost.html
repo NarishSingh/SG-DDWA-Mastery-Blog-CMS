@@ -42,9 +42,9 @@
                 <span th:text="${#temporals.format(post.postOn, 'MM-dd-yyyy, HH:mm')}">post date</span>
             </p>
 
-            <!--FIXME center this-->
-            <div>
-                <img th:src="${post.photoFilename}" alt="cover photo">
+            <div style="text-align: center;" th:if="${post.photoFilename != ''}">
+                <!--only shows if there is a cover photo-->
+                <img th:src="${post.photoFilename}" alt="cover photo" style="max-width: 1000px;">
             </div>
 
             <div th:utext="${post.body}"></div>

@@ -94,8 +94,8 @@ public class PostController {
      * @param staticPage {Boolean} from checkbox indicating if page is static or
      *                   not
      * @param auth       {Authentication} to access authenticated user
-     * @param postOn     {LocalDateTime} from form for when to post blog
-     * @param expireOn   {LocalDateTime} from form for when to remove blog
+     * @param postOn     {LocalDateTime} for when to post blog to feed
+     * @param expireOn   {LocalDateTime} for when to remove blog from feed
      * @param model      {Model} hold lists and errors on fail to post
      * @return {String} redirect to blog scroll, reload page w errors if fail
      */
@@ -209,14 +209,96 @@ public class PostController {
 
         return "editPost";
     }
-    
+
+    /**
+     * POST - attempt a edit of an existing post - admin only, and only way to
+     * approve a post
+     *
+     * @param model      {Model} holds post obj and related lists in case of
+     *                   error
+     * @param request    {HttpServletRequest} pulls in form data
+     * @param file       {MultipartFile} pull in cover photo edit
+     * @param staticPage {Boolean} static page indicator from form data
+     * @param approved   {Boolean} admin approval of post from form data
+     * @param postOn     {LocalDateTime} for when to post blog to feed
+     * @param expireOn   {LocalDateTime} for when to remove blog from feed
+     * @return {String} redirect to management page if edited, reload with
+     *         errors if failed
+     */
     @PostMapping(value = "/editPost")
     public String editPostAction(Model model, HttpServletRequest request, @RequestParam("file") MultipartFile file,
-            Boolean staticPage, Boolean approved, Authentication auth,
+            Boolean staticPage, Boolean approved,
             @RequestParam("postOn") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime postOn,
-            @RequestParam("expireOn") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime expireOn){
-        
+            @RequestParam("expireOn") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime expireOn) {
+        Post post = pDao.readPostById(Integer.parseInt(request.getParameter("id")));
+
+        post.setTitle(request.getParameter("title"));
+        post.setBody(request.getParameter("body"));
+
+        //approval status
+        if (approved != null) {
+            post.setApproved(true);
+        } else {
+            post.setApproved(false);
+        }
+
+        //static page status from check box
+        if (staticPage != null) {
+            post.setStaticPage(true);
+        } else {
+            post.setStaticPage(false);
+        }
+
+        //date time setting
+        //leave created on as is
+        post.setPostOn(postOn);
+        post.setExpireOn(expireOn);
+
+        //leave author as is
+        //cover photo
+        String filePath = iDao.saveImage(file, Long.toString(LocalDateTime.now().toEpochSecond(ZoneOffset.UTC)), coverUploadDir);
+        post.setPhotoFilename(filePath);
+
+        //set categories from multi select
+        List<Category> categories = new ArrayList<>();
+        String[] categoryIds = request.getParameterValues("categoryId");
+        if (categoryIds != null) {
+            for (String id : categoryIds) {
+                categories.add(cDao.readCategoryById(Integer.parseInt(id)));
+            }
+            post.setCategories(categories);
+        }
+
+        Validator validate = Validation.buildDefaultValidatorFactory().getValidator();
+        violations = validate.validate(post);
+
+        if (violations.isEmpty()) {
+            pDao.updatePost(post);
+        } else {
+            model.addAttribute("post", post);
+            model.addAttribute("categories", cDao.readAllCategories());
+            model.addAttribute("errors", violations);
+            String now = LocalDateTime.now().withSecond(0).withNano(0).toString();
+            model.addAttribute("now", now);
+
+            return "editPost"; //reload with errors
+        }
+
+        return "redirect:/postManagement";
     }
 
     /*DELETE - ADMIN ONLY*/
+    /**
+     * POST - delete a post - admin only
+     *
+     * @param request {HttpServletRequest} will retrieve id from data table
+     * @return {String} redirect to the post management page
+     */
+    @PostMapping("/deletePost")
+    public String deletePost(HttpServletRequest request) {
+        int id = Integer.parseInt(request.getParameter("id"));
+        pDao.deletePostById(id);
+
+        return "redirect:/postManagement";
+    }
 }
