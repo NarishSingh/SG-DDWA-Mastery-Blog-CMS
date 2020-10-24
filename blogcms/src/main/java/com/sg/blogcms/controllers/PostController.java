@@ -51,7 +51,7 @@ public class PostController {
     @GetMapping("/createPost")
     public String displayCreatePage(Model model) {
         String now = LocalDateTime.now().withSecond(0).withNano(0).toString();
-        
+
         model.addAttribute("categories", cDao.readAllCategories());
         model.addAttribute("errors", violations);
         model.addAttribute("now", now); //to spoof a time for postOn
@@ -79,11 +79,11 @@ public class PostController {
      *
      * @param request    {HttpServletRequest} pull in form data
      * @param file       {MultipartFile} pull in cover photo
-     * @param staticPage {Boolean} param from checkbox indicating if page is
+     * @param staticPage {Boolean} from checkbox indicating if page is
      *                   static or not
      * @param auth       {Authentication} to access authenticated user
-     * @param postOn     {LocalDateTime} data from form for when to post blog
-     * @param expireOn   {LocalDateTime} data from form for when to remove blog
+     * @param postOn     {LocalDateTime} from form for when to post blog
+     * @param expireOn   {LocalDateTime} from form for when to remove blog
      * @param model      {Model} hold lists and errors on fail to post
      * @return {String} redirect to blog scroll, reload page w errors if fail
      */
@@ -126,7 +126,6 @@ public class PostController {
             }
             post.setCategories(categories);
         }
-        
 
         Validator validate = Validation.buildDefaultValidatorFactory().getValidator();
         violations = validate.validate(post);
