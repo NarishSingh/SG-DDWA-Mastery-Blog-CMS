@@ -35,15 +35,15 @@ public class PostController {
     @Autowired
     CategoryDao cDao;
     @Autowired
-    PostDao pDao;
-    @Autowired
     ImageDao iDao;
+    @Autowired
+    PostDao pDao;
     private final String coverUploadDir = "Posts";
     Set<ConstraintViolation<Post>> violations = new HashSet<>();
 
     /*MAIN - ADMIN/CREATOR*/
     /**
-     * GET - load the post creation main page
+     * GET - load the post creation main page - admin/creator
      *
      * @param model {Model} load related lists and errors
      * @return {String} load create post page
@@ -60,7 +60,7 @@ public class PostController {
     }
 
     /**
-     * GET - load the category creation main page
+     * GET - load the category creation main page - admin/creator
      *
      * @param model {Model} load related lists and errors
      * @return {String} load create category page
@@ -71,6 +71,18 @@ public class PostController {
         model.addAttribute("errors", violations);
 
         return "createCategory";
+    }
+    
+    /**
+     * GET - load post management main page - admin only
+     * @param model {Model} holds post list
+     * @return {String} load post management page
+     */
+    @GetMapping("/postManagement")
+    public String displayPostManagementPage(Model model){
+        model.addAttribute("posts", pDao.readAllPosts());
+        
+        return "postManagement";
     }
 
     /*CREATE - ADMIN/CREATOR*/
@@ -169,6 +181,9 @@ public class PostController {
 
         return "redirect:/createPost";
     }
+    
+    /*READ/VIEW - ADMIN AND PUBLIC*/
+    
 
     /*EDIT - ADMIN ONLY*/
  /*DELETE - ADMIN ONLY*/
