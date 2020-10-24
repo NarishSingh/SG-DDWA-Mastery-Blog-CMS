@@ -183,8 +183,14 @@ public class PostController {
     }
     
     /*READ/VIEW - ADMIN AND PUBLIC*/
+    @GetMapping("/viewPost")
+    public String displayViewPostPage(Model model, HttpServletRequest request){
+        Post post = pDao.readPostById(Integer.parseInt(request.getParameter("id")));
+        model.addAttribute("post", post);
+        
+        return "viewPost";
+    }
     
-
     /*EDIT - ADMIN ONLY*/
  /*DELETE - ADMIN ONLY*/
 }
