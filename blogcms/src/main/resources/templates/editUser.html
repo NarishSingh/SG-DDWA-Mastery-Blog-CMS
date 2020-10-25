@@ -83,7 +83,7 @@
             <div class="d-flex text-center" th:if="${!errors.isEmpty()}">
                 <p class="alert alert-danger" th:each="error : ${errors}" th:text="${error.message}">Error message</p>
             </div>
-            <div class="d-flex" id="add-user-form">
+            <div class="d-flex" id="edit-user-form">
                 <form action="editUser" class="form-horizontal" method="post" enctype="multipart/form-data">
                     <!--FIXME make into two boxes, where the inputs overflow into the right-->
                     <input type="hidden" class="form-control" th:name="${_csrf.parameterName}"
