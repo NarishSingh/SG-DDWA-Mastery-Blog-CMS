@@ -57,16 +57,17 @@ public class PostController {
 
         return "createPost";
     }
-    
+
     /**
      * GET - load blog feed
+     *
      * @param model {Model} holds all publishable posts
-     * @return 
+     * @return {String} load blog page
      */
     @GetMapping("/blog")
-    public String displayBlog(Model model){
+    public String displayBlog(Model model) {
         model.addAttribute("posts", pDao.readAllForPublication()); //only publishable poss
-        
+
         return "blog";
     }
 
