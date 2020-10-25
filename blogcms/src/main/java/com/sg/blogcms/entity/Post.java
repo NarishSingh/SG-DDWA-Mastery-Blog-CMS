@@ -42,6 +42,7 @@ public class Post {
 
     private String photoFilename;
     
+    @NotNull(message = "Please indicate post category, or create a new one at link below category select")
     private List<Category> categories;
 
     /*gs*/

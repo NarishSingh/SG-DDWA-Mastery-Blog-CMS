@@ -82,8 +82,6 @@ public class PostDaoDb implements PostDao {
 
     @Override
     public List<Post> readPostsByDate() {
-        //FIXME THIS WILL BE A PROBLEM IF EXPIRE ON IS NULLABLE
-        //CONSIDER AN IF STATEMENT
         String readActivePosts = "SELECT * FROM post "
                 + "WHERE postOn <= NOW() "
                 + "AND expireOn >= NOW();";
@@ -114,8 +112,7 @@ public class PostDaoDb implements PostDao {
     @Override
     public List<Post> readAllForPublication() {
         String readPublish = "SELECT * FROM post "
-                + "WHERE postOn <= NOW() "
-                + "AND expireOn >= NOW() "
+                + "WHERE postOn <= NOW() AND expireOn >= NOW() "
                 + "AND isApproved != 0;";
         List<Post> publishPosts = jdbc.query(readPublish, new PostMapper());
 

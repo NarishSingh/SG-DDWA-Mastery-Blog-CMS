@@ -35,12 +35,13 @@
     <!--Carousel-->
 
     <!--Grid with posts-->
-    <div th:each="post : ${posts}" id="post-grid">
-        <div class="post-box">
-            <p th:text="${#temporals.format(post.postOn, 'MM-dd-yyyy, HH:mm')}"></p> <!--Date posted-->
-            <p th:text="${post.title}"></p> <!--Title-->
-            <p th:text="${post.user.firstName + ' ' + post.user.lastName}"></p> <!--Author-->
-            <p></p> <!---->
+    <div id="post-grid">
+        <div th:each="post : ${posts}">
+            <a style="display: block;" class="post-box" th:href="@{/viewPost(id=${post.id})}">
+                <p th:text="${#temporals.format(post.postOn, 'MM-dd-yyyy, HH:mm')}"></p> <!--Date posted-->
+                <p th:text="${post.title}"></p> <!--Title-->
+                <p th:text="${post.user.firstName + ' ' + post.user.lastName}"></p> <!--Author-->
+            </a>
         </div>
     </div>
 </div>

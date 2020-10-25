@@ -28,9 +28,10 @@ WHERE userId = 1;
 SELECT * FROM blogCms.`user`;
 SELECT * FROM `role`;
 SELECT * FROM userRole;
-SELECT * FROM blogCms.post;
 SELECT * FROM blogCms.category;
 SELECT * FROM blogCms.postCategory;
-SELECT * FROM blogCms.post
-    WHERE postId = 1;
 
+SELECT * FROM blogCms.post;
+SELECT * FROM blogCms.post 
+    WHERE (2020-10-25 15:47:00.000 <= NOW() AND 2020-10-25 15:50:00.000 >= NOW()) 
+        AND isApproved != 0;

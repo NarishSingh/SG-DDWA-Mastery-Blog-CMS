@@ -143,6 +143,13 @@ public class PostController {
 
         if (violations.isEmpty()) {
             pDao.createPost(post);
+        } else {
+            model.addAttribute("categories", cDao.readAllCategories());
+            model.addAttribute("errors", violations);
+            String now = LocalDateTime.now().withSecond(0).withNano(0).toString();
+            model.addAttribute("now", now); //to spoof a time for postOn
+
+            return "createPost";
         }
 
         return "redirect:/blog";
