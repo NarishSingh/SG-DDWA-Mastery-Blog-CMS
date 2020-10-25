@@ -197,13 +197,29 @@ public class UserController {
 
     /*DELETE*/
     /**
-     * POST - delete a user account
+     * GET - load delete confirmation page for an account
      *
      * @param request {HttpServletRequest} will retrieve id from data table
-     * @return {String} reload the admin page
+     * @param model   {Model} hold the user obj
+     * @return {String} load delete confirmation page
      */
-    @PostMapping("/deleteUser")
-    public String deleteUser(HttpServletRequest request) {
+    @GetMapping("/deleteUser")
+    public String deleteUser(HttpServletRequest request, Model model) {
+        User user = uDao.readUserById(Integer.parseInt(request.getParameter("id")));
+
+        model.addAttribute("user", user);
+
+        return "deleteUser";
+    }
+
+    /**
+     * POST - delete a user account
+     *
+     * @param request {HttpServletRequest} will retrieve id from confirmation
+     * @return {String} redirect the admin page
+     */
+    @PostMapping("/performDeleteUser")
+    public String performDeleteUser(HttpServletRequest request) {
         int id = Integer.parseInt(request.getParameter("id"));
         uDao.deleteUserById(id);
 

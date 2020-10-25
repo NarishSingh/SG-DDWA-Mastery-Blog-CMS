@@ -199,17 +199,18 @@
                                 </div>
                             </td>
                             <td th:text="${user.enabled}">enabled</td>
-                            <td><a href="#" th:href="@{/editUser(id=${user.id})}">
-                                <i class="fas fa-user-edit"></i></a>
+                            <td>
+                                <a href="#" th:href="@{/editUser(id=${user.id})}"><i class="fas fa-user-edit"></i></a>
                             </td>
                             <td>
-                                <form class="form-inline" method="post" action="/deleteUser">
+                                <a href="#" th:href="@{/deleteUser(id=${user.id})}"><i class="fas fa-trash"></i></a>
+                                <!--<form class="form-inline" method="post" action="/deleteUser">
                                     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                                     <input type="hidden" name="id" th:value="${user.id}">
                                     <button type="submit" class="btn btn-link btn-sm">
-                                        <i class="fas fa-trash"></i> <!--FIXME idk why this is so big-->
+                                        <i class="fas fa-trash"></i>
                                     </button>
-                                </form>
+                                </form>-->
                             </td>
                         </tr>
                     </div>
