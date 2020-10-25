@@ -289,13 +289,29 @@ public class PostController {
 
     /*DELETE - ADMIN ONLY*/
     /**
-     * POST - delete a post - admin only
+     * POST - load delete confirmation page for a post - admin only
      *
-     * @param request {HttpServletRequest} will retrieve id from data table
+     * @param request {HttpServletRequest} pulls in id
+     * @param model   {Model} holds post info
      * @return {String} redirect to the post management page
      */
-    @PostMapping("/deletePost")
-    public String deletePost(HttpServletRequest request) {
+    @GetMapping("/deletePost")
+    public String deletePost(HttpServletRequest request, Model model) {
+        Post post = pDao.readPostById(Integer.parseInt(request.getParameter("id")));
+
+        model.addAttribute("post", post);
+
+        return "deletePost";
+    }
+
+    /**
+     * POST - Delete a post from site
+     *
+     * @param request {HttpServletRequest} pulls in the post id
+     * @return {String} redirect to management page on delete
+     */
+    @PostMapping("/performDeletePost")
+    public String performDeletePost(HttpServletRequest request) {
         int id = Integer.parseInt(request.getParameter("id"));
         pDao.deletePostById(id);
 

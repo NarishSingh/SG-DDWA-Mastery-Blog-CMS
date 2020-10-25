@@ -49,6 +49,15 @@
 
             <div th:utext="${post.body}"></div>
         </div>
+
+        <form action="performDeletePost" method="post" class="form-inline justify-content-center">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+            <input type="hidden" name="id" th:value="${post.id}">
+            <button type="submit" class="btn btn-outline-success">
+                <span>Delete</span><i class="fas fa-trash"></i>
+            </button>
+            <a href="postManagement" class="btn btn-outline-danger">Cancel</a>
+        </form>
     </main>
 
     <!--footer-->

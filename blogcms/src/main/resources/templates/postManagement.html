@@ -115,13 +115,7 @@
                             <td><a href="#" th:href="@{/viewPost(id=${post.id})}"><i class="fas fa-eye"></i></a></td>
                             <td><a href="#" th:href="@{/editPost(id=${post.id})}"><i class="fas fa-edit"></i></a></td>
                             <td>
-                                <form action="/deletePost" method="post" class="form-inline">
-                                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
-                                    <input type="hidden" name="id" th:value="${post.user.id}">
-                                    <button type="submit" class="btn btn-link btn-sm">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </form>
+                                <a href="#" th:href="@{/deletePost(id=${post.id})}"><i class="fas fa-trash"></i></a>
                             </td>
                         </tr>
                     </div>
