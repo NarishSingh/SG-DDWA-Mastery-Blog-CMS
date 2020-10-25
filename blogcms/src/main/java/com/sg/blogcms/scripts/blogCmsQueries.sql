@@ -33,5 +33,5 @@ SELECT * FROM blogCms.postCategory;
 
 SELECT * FROM blogCms.post;
 SELECT * FROM blogCms.post 
-    WHERE (2020-10-25 15:47:00.000 <= NOW() AND 2020-10-25 15:50:00.000 >= NOW()) 
+    WHERE (postOn <= NOW() AND expireOn >= NOW()) 
         AND isApproved != 0;
