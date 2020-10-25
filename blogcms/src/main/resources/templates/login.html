@@ -33,10 +33,10 @@
 
     <!--LOGIN FORM-->
     <!--login fail banner-->
-    <div class="container">
+    <div>
         <h3 th:if="${#request.getParameter('login_error') == '1'}">Wrong id or password - Please re-enter</h3>
 
-        <form role="form" method="post" action="login" class="form-horizontal">
+        <form role="form" method="post" action="login" class="form-horizontal text-center">
             <!--FIXME figure out how to center the form inputs-->
             <!--username-->
             <div class="form-group">

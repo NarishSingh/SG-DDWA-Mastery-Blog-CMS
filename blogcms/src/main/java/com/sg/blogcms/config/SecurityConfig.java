@@ -46,15 +46,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
      */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        //TODO authorize pages for content creator -> view and create, and admin -> all
-        //FIXME add more pages as created
-        /*
         http.authorizeRequests()
                 .antMatchers("/admin").hasRole("ADMIN") //admin control panel
-                .antMatchers("/", "/home").permitAll()
+                .antMatchers("/deletePost").hasRole("ADMIN")
+                .antMatchers("/deleteUser").hasRole("ADMIN")
+                .antMatchers("/editCategory").hasRole("ADMIN")
+                .antMatchers("/editPost").hasRole("ADMIN")
+                .antMatchers("/editUser").hasRole("ADMIN")
+                .antMatchers("/postManagement").hasRole("ADMIN")
+                .antMatchers("/createCategory").hasAnyRole("CREATOR", "ADMIN")
+                .antMatchers("/createPost").hasAnyRole("CREATOR", "ADMIN")
+                .antMatchers("/", "/home", "/login", "/blog", "/viewPost").permitAll()
                 .antMatchers("/styles/**", "/js/**", "/fonts/**").permitAll()
-                .antMatchers("/create").hasRole("CREATOR") //create post page
-                .antMatchers("/blogManagement").hasRole("CREATOR") //post management page
                 //login form submissions
                 .and()
                 .formLogin()
@@ -65,9 +68,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logout()
                 .logoutSuccessUrl("/") //on log out, go to base page
                 .permitAll();
-*/
         
-        //FIXME drafting only, remove for production
+        /*
         http.authorizeRequests()
                 .anyRequest().permitAll()
                 .and()
@@ -79,6 +81,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logout()
                 .logoutSuccessUrl("/") //on log out, go to base page
                 .permitAll();
+*/
     }
 
 }
