@@ -55,7 +55,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#add-user-form">
+                        <a class="nav-link" href="#add-user">
                             <i class="fas fa-plus-square"></i>
                             Add New Account
                         </a>
@@ -100,7 +100,7 @@
             </div>-->
 
             <!--add user form-->
-            <h2>Create Account</h2>
+            <h2 id="add-user">Create Account</h2>
             <!--Error box-->
             <div class="d-flex text-center" th:if="${!errors.isEmpty()}">
                 <p class="alert alert-danger" th:each="error : ${errors}" th:text="${error.message}">Error message</p>
@@ -173,7 +173,7 @@
             <div class="table-responsive">
                 <table class="table table-striped table-sm" id="user-data-table">
                     <thead class="thead-dark">
-                    <tr>
+                    <tr style="vertical-align: center;">
                         <th>Username</th>
                         <th>Name</th>
                         <th>E-mail</th>
@@ -187,7 +187,7 @@
 
                     <tbody>
                     <div th:each="user : ${users}">
-                        <tr>
+                        <tr style="vertical-align: center;">
                             <td th:text="${user.username}">username</td>
                             <td th:text="${user.firstName + ' ' + user.lastName}">name</td>
                             <td th:text="${user.email}">email</td>

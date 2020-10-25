@@ -15,7 +15,7 @@
 <body>
 <div class="d-flex w-100 h-100 p-3 mx-auto flex-column">
     <!--navbar-->
-    <header class="masthead mb-auto">
+    <header class="masthead mb-auto" style="margin-bottom: 0px;">
         <div class="inner">
             <h3 class="masthead-brand">Idealism</h3>
             <nav class="nav nav-masthead justify-content-center">
@@ -30,26 +30,31 @@
         </div>
     </header>
 
-    <!--Edit Category Form-->
-    <h2>Edit Hashtag</h2>
-    <!--Error box-->
-    <div class="d-flex text-center" th:if="${!errors.isEmpty()}">
-        <p class="alert alert-danger" th:each="error : ${errors}" th:text="${error.message}">Error message</p>
-    </div>
-    <form class="form-inline" action="editCategory" method="post">
-        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-        <input type="hidden" name="id" id="id" th:value="${category.id}">
+    <main role="main" class="inner-cover">
+        <div class="justify-content-center align-items-center">
+            <!--Edit Category Form-->
+            <h2>Edit Hashtag</h2>
+            <!--Error box-->
+            <div class="d-flex" th:if="${!errors.isEmpty()}">
+                <p class="alert alert-danger" th:each="error : ${errors}" th:text="${error.message}">Error message</p>
+            </div>
+            <form class="form-inline" action="editCategory" method="post">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                <input type="hidden" name="id" id="id" th:value="${category.id}">
 
-        <div class="form-group row">
-            <div class="col-lg-12 col-sm-12">
-                <input type="text" class="form-control" name="category" id="category" th:value="${category.category}">
-            </div>
-            <div class="col-lg-12 col-sm-12">
-                <button type="submit" class="btn btn-outline-success">Update Category</button>
-                <a href="postManagement" class="btn btn-outline-danger">Cancel</a>
-            </div>
+                <div class="form-group row">
+                    <div class="col-lg-12 col-sm-12">
+                        <input type="text" class="form-control" name="category" id="category"
+                               th:value="${category.category}">
+                    </div>
+                    <div class="col-lg-12 col-sm-12">
+                        <button type="submit" class="btn btn-outline-success">Update Category</button>
+                        <a href="postManagement" class="btn btn-outline-danger">Cancel</a>
+                    </div>
+                </div>
+            </form>
         </div>
-    </form>
+    </main>
 </div>
 
 <!--Scripts-->

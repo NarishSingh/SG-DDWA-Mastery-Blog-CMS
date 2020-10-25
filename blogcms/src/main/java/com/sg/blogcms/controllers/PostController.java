@@ -40,7 +40,6 @@ public class PostController {
     PostDao pDao;
     private final String coverUploadDir = "Posts";
     Set<ConstraintViolation<Post>> violations = new HashSet<>();
-    Set<ConstraintViolation<Category>> categoryViolations = new HashSet<>();
 
     /*MAIN - ADMIN/CREATOR*/
     /**
@@ -57,20 +56,6 @@ public class PostController {
         model.addAttribute("now", now); //to spoof a time for postOn
 
         return "createPost";
-    }
-
-    /**
-     * GET - load the category creation main page - admin/creator
-     *
-     * @param model {Model} load related lists and errors
-     * @return {String} load create category page
-     */
-    @GetMapping("/createCategory")
-    public String displayCreateCategoryPage(Model model) {
-        model.addAttribute("categories", cDao.readAllCategories());
-        model.addAttribute("errors", categoryViolations);
-
-        return "createCategory";
     }
 
     /**
@@ -149,33 +134,6 @@ public class PostController {
 
         return "redirect:/createPost"; //TODO should load blog scroll, change later
 //        return "redirect:/browse";
-    }
-
-    /**
-     * Create a new category to hashtag a post
-     *
-     * @param request {HttpServletRequest} pulls in form data
-     * @param model   {Model} holds errors if category is invalid
-     * @return {String} redirect to post creation page if created, reload page
-     *         with errors if fail
-     */
-    @PostMapping("createCategory")
-    public String addCategory(HttpServletRequest request, Model model) {
-        Category c = new Category();
-        String categoryString = request.getParameter("newCategory");
-        c.setCategory(categoryString);
-
-        Validator validate = Validation.buildDefaultValidatorFactory().getValidator();
-        categoryViolations = validate.validate(c);
-
-        if (categoryViolations.isEmpty()) {
-            cDao.createCategory(c);
-        } else {
-            model.addAttribute("errors", categoryViolations);
-            return "createCategory";
-        }
-
-        return "redirect:/createPost";
     }
 
     /*READ/VIEW - ADMIN AND PUBLIC*/
@@ -292,51 +250,6 @@ public class PostController {
         return "redirect:/postManagement";
     }
 
-    /**
-     * GET - load edit category page
-     *
-     * @param model   {Model} holds category obj and errors
-     * @param request {HttpServletRequest} pulls in id for edit
-     * @return {String} load edit category page
-     */
-    @GetMapping("/editCategory")
-    public String editCategoryDisplay(Model model, HttpServletRequest request) {
-        Category category = cDao.readCategoryById(Integer.parseInt(request.getParameter("id")));
-
-        model.addAttribute("category", category);
-        model.addAttribute("errors", categoryViolations);
-
-        return "editCategory";
-    }
-
-    /**
-     * POST - attempt a category edit
-     *
-     * @param request {HttpServletRequest} pulls in id
-     * @param model   {Model} holds obj and errors on fail to edit
-     * @return {String} redirect to post management page if edited, reload with
-     *         errors if failed
-     */
-    @PostMapping(value = "/editCategory")
-    public String editCategoryAction(HttpServletRequest request, Model model) {
-        Category c = cDao.readCategoryById(Integer.parseInt(request.getParameter("id")));
-        String categoryString = request.getParameter("category");
-        c.setCategory(categoryString);
-
-        Validator validate = Validation.buildDefaultValidatorFactory().getValidator();
-        categoryViolations = validate.validate(c);
-
-        if (categoryViolations.isEmpty()) {
-            cDao.updateCategory(c);
-        } else {
-            model.addAttribute("category", c);
-            model.addAttribute("errors", categoryViolations);
-            return "editCategory";
-        }
-
-        return "redirect:/postManagement";
-    }
-
     /*DELETE - ADMIN ONLY*/
     /**
      * POST - load delete confirmation page for a post - admin only
@@ -367,16 +280,4 @@ public class PostController {
         return "redirect:/postManagement";
     }
 
-    /**
-     * POST - delete a category/hashtag
-     *
-     * @param request {HttpServletRequest} will retrieve id from data table
-     * @return {String} reload the post management page
-     */
-    @PostMapping("/deleteCategory")
-    public String deleteCategory(HttpServletRequest request) {
-        cDao.deleteCategoryById(Integer.parseInt(request.getParameter("id")));
-
-        return "redirect:/postManagement";
-    }
 }
