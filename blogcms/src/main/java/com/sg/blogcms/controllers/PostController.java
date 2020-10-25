@@ -57,6 +57,18 @@ public class PostController {
 
         return "createPost";
     }
+    
+    /**
+     * GET - load blog feed
+     * @param model {Model} holds all publishable posts
+     * @return 
+     */
+    @GetMapping("/blog")
+    public String displayBlog(Model model){
+        model.addAttribute("posts", pDao.readAllForPublication()); //only publishable poss
+        
+        return "blog";
+    }
 
     /**
      * GET - load post management main page - admin only
@@ -132,8 +144,7 @@ public class PostController {
             pDao.createPost(post);
         }
 
-        return "redirect:/createPost"; //TODO should load blog scroll, change later
-//        return "redirect:/browse";
+        return "redirect:/blog";
     }
 
     /*READ/VIEW - ADMIN AND PUBLIC*/

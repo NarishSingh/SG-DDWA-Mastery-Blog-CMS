@@ -21,9 +21,8 @@
             <h3 class="masthead-brand">Blog CMS</h3>
             <!--navbar-->
             <nav class="nav nav-masthead justify-content-center">
-                <!--FIXME add href links-->
                 <a class="nav-link" href="home">Home</a>
-                <a class="nav-link" href="#">Blog</a>
+                <a class="nav-link" href="blog">Blog</a>
                 <a class="nav-link" href="createPost" sec:authorize="hasAnyRole('ROLE_CREATOR','ROLE_ADMIN')">Create</a>
                 <!--admin, creator only-->
                 <a class="nav-link" href="admin" sec:authorize="hasRole('ROLE_ADMIN')">Manage</a> <!--admin only-->

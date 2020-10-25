@@ -97,7 +97,51 @@ body {
 }
 
 /*createPost.html*/
-.input-group-text{
+.input-group-text {
     background-color: #333;
     color: white;
+}
+
+/*blog.html*/
+/*carousel*/
+
+
+/*blog grid*/
+@media screen and (max-width: 576px) {
+    #post-grid {
+        margin-left: 10%;
+        margin-right: 10%;
+        width: 80%;
+        display: grid;
+        grid-template-columns: repeat(1, 3fr);
+    }
+}
+
+@media screen and (max-width: 768px) {
+    #post-grid {
+        margin-left: 10%;
+        margin-right: 10%;
+        width: 80%;
+        display: grid;
+        grid-template-columns: repeat(2, 3fr);
+    }
+}
+
+@media screen and (min-width: 900px) {
+    #post-grid {
+        margin-left: 10%;
+        margin-right: 10%;
+        width: 80%;
+        display: grid;
+        grid-template-columns: repeat(3, 3fr);
+    }
+}
+
+.post-box {
+    text-align: center;
+    border: double black;
+}
+
+.post-box:hover {
+    background-color: darkred;
 }
