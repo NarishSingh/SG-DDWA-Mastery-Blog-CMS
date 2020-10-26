@@ -143,5 +143,6 @@ body {
 }
 
 .post-box:hover {
-    background-color: darkred;
+    background-color: darkslateblue;
+    text-decoration: none;
 }
