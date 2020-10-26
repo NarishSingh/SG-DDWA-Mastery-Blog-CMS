@@ -57,7 +57,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/createCategory").hasAnyRole("CREATOR", "ADMIN")
                 .antMatchers("/createPost").hasAnyRole("CREATOR", "ADMIN")
                 .antMatchers("/", "/home", "/login", "/blog", "/viewPost").permitAll()
-                .antMatchers("/styles/**", "/js/**", "/fonts/**").permitAll()
+                .antMatchers("/styles/**", "/js/**", "/fonts/**", "/images/**").permitAll()
                 //login form submissions
                 .and()
                 .formLogin()
