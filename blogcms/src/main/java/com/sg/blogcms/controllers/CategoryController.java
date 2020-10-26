@@ -19,7 +19,7 @@ public class CategoryController {
 
     @Autowired
     CategoryDao cDao;
-    Set<ConstraintViolation<Category>> categoryViolations = new HashSet<>();
+    Set<ConstraintViolation<Category>> violations = new HashSet<>();
 
     /**
      * GET - load the category creation main page - admin/creator
@@ -30,7 +30,7 @@ public class CategoryController {
     @GetMapping("/createCategory")
     public String displayCreateCategoryPage(Model model) {
         model.addAttribute("categories", cDao.readAllCategories());
-        model.addAttribute("errors", categoryViolations);
+        model.addAttribute("errors", violations);
 
         return "createCategory";
     }
@@ -50,12 +50,12 @@ public class CategoryController {
         c.setCategory(categoryString);
 
         Validator validate = Validation.buildDefaultValidatorFactory().getValidator();
-        categoryViolations = validate.validate(c);
+        violations = validate.validate(c);
 
-        if (categoryViolations.isEmpty()) {
+        if (violations.isEmpty()) {
             cDao.createCategory(c);
         } else {
-            model.addAttribute("errors", categoryViolations);
+            model.addAttribute("errors", violations);
             return "createCategory";
         }
 
@@ -74,7 +74,7 @@ public class CategoryController {
         Category category = cDao.readCategoryById(Integer.parseInt(request.getParameter("id")));
 
         model.addAttribute("category", category);
-        model.addAttribute("errors", categoryViolations);
+        model.addAttribute("errors", violations);
 
         return "editCategory";
     }
@@ -94,13 +94,13 @@ public class CategoryController {
         c.setCategory(categoryString);
 
         Validator validate = Validation.buildDefaultValidatorFactory().getValidator();
-        categoryViolations = validate.validate(c);
+        violations = validate.validate(c);
 
-        if (categoryViolations.isEmpty()) {
+        if (violations.isEmpty()) {
             cDao.updateCategory(c);
         } else {
             model.addAttribute("category", c);
-            model.addAttribute("errors", categoryViolations);
+            model.addAttribute("errors", violations);
             return "editCategory";
         }
 
