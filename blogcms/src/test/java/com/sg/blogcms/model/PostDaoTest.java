@@ -297,8 +297,8 @@ public class PostDaoTest {
         List<Post> publishable = pDao.readAllForPublication();
 
         assertNotNull(publishable);
-        assertEquals(1, publishable.size());
-        assertTrue(publishable.contains(post1));
+        assertEquals(0, publishable.size());
+        assertFalse(publishable.contains(post1));
         assertFalse(publishable.contains(post2));
         assertFalse(publishable.contains(post3));
         assertFalse(publishable.contains(post4));

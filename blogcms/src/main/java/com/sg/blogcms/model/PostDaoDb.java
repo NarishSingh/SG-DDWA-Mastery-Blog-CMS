@@ -113,7 +113,8 @@ public class PostDaoDb implements PostDao {
     public List<Post> readAllForPublication() {
         String readPublish = "SELECT * FROM post "
                 + "WHERE postOn <= NOW() AND expireOn >= NOW() "
-                + "AND isApproved != 0;";
+                + "AND isApproved != 0 "
+                + "AND isStaticPage = 0;";
         List<Post> publishPosts = jdbc.query(readPublish, new PostMapper());
 
         for (Post p : publishPosts) {
