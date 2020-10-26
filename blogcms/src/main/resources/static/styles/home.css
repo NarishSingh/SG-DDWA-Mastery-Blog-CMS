@@ -106,13 +106,38 @@ body {
 /*carousel*/
 
 /*blog grid*/
-#post-grid {
-    width: 100%;
-    display: grid;
-    grid-template-columns: repeat(3, 3fr);
+@media screen and (max-width: 500px) {
+    #post-grid {
+        margin-right: 10%;
+        margin-left: 10%;
+        width: 80%;
+        display: grid;
+        grid-template-columns: repeat(1, 3fr);
+    }
+}
+
+@media screen and (max-width: 780px) {
+    #post-grid {
+        margin-right: 10%;
+        margin-left: 10%;
+        width: 80%;
+        display: grid;
+        grid-template-columns: repeat(2, 3fr);
+    }
+}
+
+@media screen and (min-width: 1000px) {
+    #post-grid {
+        margin-right: 10%;
+        margin-left: 10%;
+        width: 80%;
+        display: grid;
+        grid-template-columns: repeat(3, 3fr);
+    }
 }
 
 .post-box {
+    height: 100%    ;
     text-align: center;
     border: double black;
 }

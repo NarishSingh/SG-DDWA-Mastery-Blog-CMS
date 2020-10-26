@@ -206,7 +206,6 @@ public class UserController {
     @GetMapping("/deleteUser")
     public String deleteUser(HttpServletRequest request, Model model) {
         User user = uDao.readUserById(Integer.parseInt(request.getParameter("id")));
-
         model.addAttribute("user", user);
 
         return "deleteUser";

@@ -42,7 +42,7 @@
                 <li data-target="#post-caro" data-slide-to="2"></li>
             </ol>
             <div class="carousel-inner" th:each="post : ${posts}">
-                <div class="carousel-item active">
+                <div class="carousel-item">
                     <img th:src="${post.photoFilename}" class="d-block w-100">
                     <div class="carousel-caption d-none d-md-block">
                         <h5 th:text="${post.title}"></h5>
