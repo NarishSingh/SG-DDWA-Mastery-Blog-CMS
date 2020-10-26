@@ -153,8 +153,9 @@
                     <!--image upload-->
                     <div class="form-group custom-file" style="text-align: center;">
                         <img th:src="${user.photoFilename}" style="height: 250px; padding: 0;"/>
-                        <input type="file" class="custom-file-input" name="file" id="file">
-                        <label for="file" class="custom-file-label">Edit Profile Picture...</label>
+                        <input type="file" class="custom-file-input" name="file" id="file"
+                               onchange="$('#file-label').html(this.files[0].name)">
+                        <label for="file" class="custom-file-label" id="file-label">Edit Profile Picture...</label>
                     </div>
 
                     <button type="submit" class="btn btn-outline-dark">Update</button>

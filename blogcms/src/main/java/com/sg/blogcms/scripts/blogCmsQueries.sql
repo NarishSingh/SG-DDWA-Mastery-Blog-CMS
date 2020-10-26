@@ -7,9 +7,6 @@ INSERT INTO `role` (`role`)
 INSERT INTO `role` (`role`)
     VALUES ("ROLE_CREATOR");
 
-INSERT INTO category (category)
-    VALUES ("New Product");
-
 -- admin manual add
 INSERT INTO `user` (username, password, isEnabled)
     VALUES ("Narish", "password", 1);
@@ -17,13 +14,12 @@ INSERT INTO `user` (username, password, isEnabled)
 INSERT INTO userRole (userId, roleId)
     VALUES (1,1);
 
+UPDATE `user` SET 
+    password = "$2a$10$7jEqWdVdbs8p6kImwvpD6.AwdiQEZ.bdgl6QF/LSoqHF0AQvnVpFS"
+WHERE userId = 1;
+
 -- INSERT INTO post(title, body, isApproved, isStaticPage, createdOn, postOn, expireOn, userId)
 --     values ("title", "body", 1, 1, now(), now(), null, 1);
-
-
-UPDATE `user` SET 
-    password = "$2a$10$OVxfKgo/KlnxfuZvTqhs8ejKFrQs9.0URnoNSLlW7fiSR/OCvmNry"
-WHERE userId = 1;
 
 SELECT * FROM blogCms.`user`;
 SELECT * FROM `role`;

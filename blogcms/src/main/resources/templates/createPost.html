@@ -58,8 +58,9 @@
 
         <!--Cover photo image upload-->
         <div class="form-group custom-file">
-            <input type="file" class="custom-file-input" name="file" id="file">
-            <label for="file" class="custom-file-label">Upload Cover Photo...</label>
+            <input type="file" class="custom-file-input" name="file" id="file"
+                   onchange="$('#file-label').html(this.files[0].name)">
+            <label for="file" class="custom-file-label" id="file-label">Upload Cover Photo...</label>
         </div>
         <br><br>
 

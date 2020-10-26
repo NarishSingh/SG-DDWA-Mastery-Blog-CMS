@@ -147,8 +147,9 @@
 
                     <!--image upload-->
                     <div class="form-group custom-file">
-                        <input type="file" class="custom-file-input" name="file" id="file">
-                        <label for="file" class="custom-file-label">Upload Profile Picture...</label>
+                        <input type="file" class="custom-file-input" name="file" id="file"
+                               onchange="$('#file-label').html(this.files[0].name)">
+                        <label for="file" class="custom-file-label" id="file-label">Upload Profile Picture...</label>
                     </div>
 
                     <button type="submit" class="btn btn-outline-dark">Add Account</button>
@@ -162,7 +163,7 @@
             <div class="table-responsive">
                 <table class="table table-striped table-sm" id="user-data-table">
                     <thead class="thead-dark">
-                    <tr style="vertical-align: center;">
+                    <tr>
                         <th>Username</th>
                         <th>Name</th>
                         <th>E-mail</th>
@@ -176,7 +177,7 @@
 
                     <tbody>
                     <div th:each="user : ${users}">
-                        <tr style="vertical-align: center;">
+                        <tr>
                             <td th:text="${user.username}">username</td>
                             <td th:text="${user.firstName + ' ' + user.lastName}">name</td>
                             <td th:text="${user.email}">email</td>
