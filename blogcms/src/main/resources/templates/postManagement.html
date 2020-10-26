@@ -129,6 +129,19 @@
                 </table>
             </div>
 
+            <!--Static pages list-->
+            <div class="dropdown">
+                <button type="button" class="btn btn-outline-secondary" id="statics-dropdown" data-toggle="dropdown"
+                   aria-haspopup="true" aria-expanded="false">
+                    Static Posts
+                </button>
+                <div class="dropdown-menu" aria-labelledby="statics-dropdown">
+                    <div th:each="sp : ${staticPages}">
+                        <a href="#" th:href="@{/viewPost(id=${sp.id})}" th:text="${sp.title}"></a>
+                    </div>
+                </div>
+            </div>
+
             <hr>
 
             <!--Category Table-->

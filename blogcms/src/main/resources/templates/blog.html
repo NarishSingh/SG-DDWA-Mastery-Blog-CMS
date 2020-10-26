@@ -24,6 +24,18 @@
             <nav class="nav nav-masthead justify-content-center">
                 <a class="nav-link" href="home">Home</a>
                 <a class="nav-link active" href="#">Blog</a>
+                <div class="dropdown" style="margin-right: 10px; margin-left: 10px;">
+                    <a class="nav-link" id="statics-dropdown" data-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false">
+                        Static Posts
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="statics-dropdown">
+                        <div th:each="sp : ${staticPages}">
+                            <a href="#" th:href="@{/viewPost(id=${sp.id})}" th:text="${sp.title}"
+                               style="color: black;"></a>
+                        </div>
+                    </div>
+                </div>
                 <a class="nav-link" href="createPost" sec:authorize="hasAnyRole('ROLE_CREATOR','ROLE_ADMIN')">Create</a>
                 <!--admin, creator only-->
                 <a class="nav-link" href="admin" sec:authorize="hasRole('ROLE_ADMIN')">Manage</a> <!--admin only-->

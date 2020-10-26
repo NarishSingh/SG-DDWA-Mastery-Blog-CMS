@@ -2,6 +2,7 @@ package com.sg.blogcms.controllers;
 
 import com.sg.blogcms.entity.Category;
 import com.sg.blogcms.model.CategoryDao;
+import com.sg.blogcms.model.PostDao;
 import java.util.HashSet;
 import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
@@ -19,6 +20,8 @@ public class CategoryController {
 
     @Autowired
     CategoryDao cDao;
+    @Autowired
+    PostDao pDao;
     Set<ConstraintViolation<Category>> violations = new HashSet<>();
 
     /**
@@ -29,6 +32,7 @@ public class CategoryController {
      */
     @GetMapping("/createCategory")
     public String displayCreateCategoryPage(Model model) {
+        model.addAttribute("staticPages", pDao.readAllStatic());
         model.addAttribute("categories", cDao.readAllCategories());
         model.addAttribute("errors", violations);
 
@@ -71,6 +75,7 @@ public class CategoryController {
      */
     @GetMapping("/editCategory")
     public String editCategoryDisplay(Model model, HttpServletRequest request) {
+        model.addAttribute("staticPages", pDao.readAllStatic());
         Category category = cDao.readCategoryById(Integer.parseInt(request.getParameter("id")));
 
         model.addAttribute("category", category);

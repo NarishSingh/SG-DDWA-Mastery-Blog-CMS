@@ -50,6 +50,7 @@ public class PostController {
      */
     @GetMapping("/createPost")
     public String displayCreatePage(Model model) {
+        model.addAttribute("staticPages", pDao.readAllStatic());
         model.addAttribute("categories", cDao.readAllCategories());
         model.addAttribute("errors", violations);
         String now = LocalDateTime.now().withSecond(0).withNano(0).toString();
@@ -67,6 +68,7 @@ public class PostController {
     @GetMapping("/blog")
     public String displayBlog(Model model) {
         model.addAttribute("posts", pDao.readAllForPublication()); //only publishable poss
+        model.addAttribute("staticPages", pDao.readAllStatic());
 
         return "blog";
     }
@@ -79,6 +81,7 @@ public class PostController {
      */
     @GetMapping("/postManagement")
     public String displayPostManagementPage(Model model) {
+        model.addAttribute("staticPages", pDao.readAllStatic());
         model.addAttribute("posts", pDao.readAllPosts());
         model.addAttribute("categories", cDao.readAllCategories());
 
@@ -165,6 +168,7 @@ public class PostController {
      */
     @GetMapping("/viewPost")
     public String displayViewPostPage(Model model, HttpServletRequest request) {
+        model.addAttribute("staticPages", pDao.readAllStatic());
         Post post = pDao.readPostById(Integer.parseInt(request.getParameter("id")));
         model.addAttribute("post", post);
 
@@ -181,6 +185,7 @@ public class PostController {
      */
     @GetMapping("/editPost")
     public String editPostDisplay(Model model, HttpServletRequest request) {
+        model.addAttribute("staticPages", pDao.readAllStatic());
         Post post = pDao.readPostById(Integer.parseInt(request.getParameter("id")));
 
         model.addAttribute("post", post);
@@ -279,6 +284,7 @@ public class PostController {
      */
     @GetMapping("/deletePost")
     public String deletePost(HttpServletRequest request, Model model) {
+        model.addAttribute("staticPages", pDao.readAllStatic());
         Post post = pDao.readPostById(Integer.parseInt(request.getParameter("id")));
 
         model.addAttribute("post", post);
