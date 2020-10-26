@@ -125,6 +125,20 @@ public class PostDaoDb implements PostDao {
     }
 
     @Override
+    public List<Post> readAllStatic() {
+        String readStatic = "SELECT * FROM post "
+                + "WHERE isStaticPage != 0;";
+        List<Post> staticPosts = jdbc.query(readStatic, new PostMapper());
+
+        for (Post sp : staticPosts) {
+            sp.setUser(readUserForPost(sp.getId()));
+            sp.setCategories(readCategoriesForPost(sp.getId()));
+        }
+
+        return staticPosts;
+    }
+
+    @Override
     public List<Post> readPostsByCategory(int categoryId) {
         String readPCQuery = "SELECT p.* FROM post p "
                 + "JOIN postCategory pc ON pc.postId = p.postId "

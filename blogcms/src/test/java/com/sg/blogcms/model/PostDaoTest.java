@@ -303,6 +303,24 @@ public class PostDaoTest {
         assertFalse(publishable.contains(post3));
         assertFalse(publishable.contains(post4));
     }
+    
+    /**
+     * Test of readAllStatic method, of class PostDao.
+     */
+    @Test
+    public void testReadAllStatic(){
+        Post post1 = pDao.createPost(p1);
+        Post post2 = pDao.createPost(p2);
+        Post post3 = pDao.createPost(p3);
+        Post post4 = pDao.createPost(p4);
+        
+        List<Post> statics = pDao.readAllStatic();
+        assertEquals(2, statics.size());
+        assertTrue(statics.contains(post1));
+        assertFalse(statics.contains(post2));
+        assertFalse(statics.contains(post3));
+        assertTrue(statics.contains(post4));
+    }
 
     /**
      * Test of readPostsByCategory method, of class PostDao.

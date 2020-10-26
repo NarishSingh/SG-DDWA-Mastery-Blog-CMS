@@ -54,6 +54,13 @@ public interface PostDao {
     List<Post> readAllForPublication();
 
     /**
+     * Retrieve all static posts
+     *
+     * @return {List} only static posts
+     */
+    List<Post> readAllStatic();
+
+    /**
      * Retrieve posts by Category
      *
      * @param categoryId {int} valid category id
